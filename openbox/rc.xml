@@ -247,6 +247,12 @@
         <action name="ToggleDecorations"/>
         <action name="BreakChroot"/>
       </keybind>
+      <!-- Toggle SIGSTOP/SIGCONT -->
+      <keybind key="s">
+         <action name="Execute">
+            <command>~/.config/openbox/toggle_stop.sh</command>
+         </action>
+      </keybind>
       <!-- Resize mode -->
       <keybind key="r" chroot="true">
         <keybind key="S-j">
