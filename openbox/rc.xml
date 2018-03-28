@@ -1002,6 +1002,10 @@
       <maximized>true</maximized>
       <monitor>2</monitor>
     </application>
+    <application title="WhatsApp - Mozilla Firefox">
+      <decor>no</decor>
+      <focus>no</focus>
+    </application>
     <application class="Firefox" role="browser">
       <decor>no</decor>
       <maximized>true</maximized>
