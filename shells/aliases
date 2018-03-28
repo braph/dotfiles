@@ -94,6 +94,12 @@ alias openports='netstat --all --numeric --programs --inet'
 alias killflash='pkill -f flash'
 alias dis='bg;disown'
 
+# browsers ####################################################################
+alias inox-facebook="
+   inox --user-data-dir=~/.browsers/inox-facebook --proxy-server=http://localhost:8118 --host-resolver-rules='MAP * ~NOTFOUND , EXCLUDE localhost'"
+alias inox-messenger="
+   inox --user-data-dir=~/.browsers/inox-messenger"
+
 #> define COLORIZE_EXCLUDE wget|ls|ulimit|grep
 #> define COLORIZE_ALIAS_FILE "/tmp/.$USER.zsh.coloraliases"
 
