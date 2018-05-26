@@ -96,11 +96,11 @@ alias dis='bg;disown'
 
 # browsers ####################################################################
 alias inox-facebook="
-   inox --user-data-dir=~/.browsers/inox-facebook --proxy-server=http://localhost:8118 --host-resolver-rules='MAP * ~NOTFOUND , EXCLUDE localhost'"
+   inox --user-data-dir=$HOME/.browsers/inox-facebook --proxy-server=http://localhost:8118 --host-resolver-rules='MAP * ~NOTFOUND , EXCLUDE localhost'"
 alias inox-messenger="
-   inox --user-data-dir=~/.browsers/inox-messenger"
+   inox --user-data-dir=$HOME/.browsers/inox-messenger"
 
-#> define COLORIZE_EXCLUDE wget|ls|ulimit|grep
+#> define COLORIZE_EXCLUDE wget|ls|ulimit|grep|dmesg
 #> define COLORIZE_ALIAS_FILE "/tmp/.$USER.zsh.coloraliases"
 
 __colorize_alias() {

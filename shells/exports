@@ -56,6 +56,12 @@ export VISUAL=vim
 # pacaur: use /tmp as builddir ################################################
 #export BUILDDIR=/tmp
 
+# android studio ##############################################################
+if [[ -e "$HOME/Android/Sdk" ]]; then
+   export ANDROID_HOME="$HOME/Android/Sdk"
+   export ANDROID_SDK_ROOT=$ANDROID_HOME
+fi
+
 # rlwrap: here are the histfiles stored #######################################
 export RLWRAP_HOME=~/.rlwrap
 
