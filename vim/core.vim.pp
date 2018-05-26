@@ -121,3 +121,6 @@ set cursorline
 "> Draw a vertical line at column 80
 set colorcolumn=80
 highlight ColorColumn ctermbg=235 
+
+"> change highlight color
+hi Search cterm=bold ctermfg=blue ctermbg=black

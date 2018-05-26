@@ -6,7 +6,11 @@ Plugin 't9md/vim-choosewin'
 Plugin 'selectbuf'
 Plugin 'gnupg'
 
+Plugin 'keith/swift.vim'
+Plugin 'zzeroo/vim-vala'
+
 Plugin 'justinmk/vim-syntax-extra'
+Plugin 'chrisbra/Recover.vim'
 
 " Buffer-juggler, requires ruby
 " Plugin 'sjbach/lusty'
