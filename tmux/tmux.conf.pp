@@ -208,7 +208,7 @@ bind 'C-V' save-buffer BUF_FILE \;\
            load-buffer BUF_FILE
 
 # 'V'/'C-V' will fail on 'save-buffer' if there is no buffer present.
-set-buffer ''
+set-buffer ' '
 
 # pane control
 bind -r 'M-h'  resize-pane -L
@@ -287,8 +287,9 @@ bind 'F12'     TMUX_DAEMON(select-window 22)
 bind '/'       command-prompt "find-window -TN %%"
 bind 'R'       move-window -r
 
-bind 'f'       TMUX_DAEMON(history-forward)
-bind 'b'       TMUX_DAEMON(history-backward)
+#bind 'f'       TMUX_DAEMON(history-forward)
+#bind 'b'       TMUX_DAEMON(history-backward)
+bind 'B'       move-window -t bg:
 
 bind '^a'      last-window
 bind 'h'       previous-window
