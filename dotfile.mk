@@ -82,23 +82,30 @@ FILEPP_FLAGS	?=
 #$  Ignore these files when auto generating file list
 IGNORE_FILES ?=
 
-# If neither FILES nor PP_FILES is given, auto generate file-list
-ifndef FILES
-ifndef PP_FILES
-# files that should simply be copied
-FILES := auto
-# files for preprocessor
-PP_FILES := auto
-endif
-endif
+# File selection variables
+# =============================================================================
+
+#$ FILES
+#$  File that should be copied
+FILES ?=
+
+#$ PP_FILES
+#$  Files that should be passed to the preprocessor
+PP_FILES ?= 
+
+#$ DIRECTORIES
+#$  Additional directories to be created
+DIRECTORIES ?=
 
 # Special defines
+# =============================================================================
+
 ifeq ($(HOST), )
 HOST := $(shell hostname)
 endif
 
 ifeq ($(OPERATING_SYSTEM), )
-OPERATING_SYSTEM := $(shell uname -o)
+OPERATING_SYSTEM := $(shell uname -s)
 endif
 
 # Parameters end here, new variables below this line should be
@@ -126,7 +133,7 @@ _ADDITIONAL_DEFINES = HOST OPERATING_SYSTEM PRIVATE_DIR _TEMP_DIR \
 _IGNORE_VARS := FILES PP_FILES IGNORE_FILES \
 	ROOT_DIR BUILD_DIR PRIVATE_DIR PREFIX_DIR FILE_PREFIX \
 	FILEPP FILEPP_PREFIX FILEPP_MODULES FILEPP_INCLUDE FILEPP_FLAGS
-_CONFIG_VARS := $(shell sed -nr \
+_CONFIG_VARS := $(shell sed -n -E \
 	's/^([a-zA-Z0-9][a-zA-Z0-9_]+)[[:space:]]*[:\+\?]?=.*/\1/p' \
 	$(filter-out %dotfile.mk, $(MAKEFILE_LIST)) )
 _CONFIG_VARS := $(sort $(_CONFIG_VARS)) # deduplicate variables
@@ -151,34 +158,25 @@ _FILEPP_INCLUDE += $(addprefix -I, $(FILEPP_INCLUDE))
 # We NEVER want these files (BUILD_DIR could also be inside package dir)
 _FORCE_IGNORE := $(MAKEFILE_LIST) $(BUILD_DIR) $(BUILD_DIR)/%
 
-ifeq ($(PP_FILES), auto)
-_PP_FILES := $(shell find . -mindepth 1 -type f -name '*.pp')
-else
-_PP_FILES := $(PP_FILES)
+# If neither FILES nor PP_FILES is given, auto generate file-list
+ifeq ($(FILES), )
+ifeq ($(PP_FILES), )
+PP_FILES := $(shell find . -mindepth 1 -type f -name '*.pp')
+FILES := $(shell find . -mindepth 1 -type f -not -name '*.pp')
 endif
-
-ifeq ($(FILES), auto)
-_FILES := $(shell find . -mindepth 1 -type f -not -name '*.pp')
-else
-_FILES := $(FILES)
 endif
 
 # Repair paths
-_FILES := $(subst $(_PACKAGE_PATH)/,, $(realpath $(_FILES)))
-_PP_FILES := $(subst $(_PACKAGE_PATH)/,, $(realpath $(_PP_FILES)))
+FILES := $(subst $(_PACKAGE_PATH)/,, $(realpath $(FILES)))
+PP_FILES := $(subst $(_PACKAGE_PATH)/,, $(realpath $(PP_FILES)))
 
 # Remove ignored files
-_FILES := $(filter-out $(_FORCE_IGNORE) $(IGNORE_FILES), $(_FILES))
-_PP_FILES := $(filter-out $(_FORCE_IGNORE) $(IGNORE_FILES), $(_PP_FILES))
+FILES := $(filter-out $(_FORCE_IGNORE) $(IGNORE_FILES), $(FILES))
+PP_FILES := $(filter-out $(_FORCE_IGNORE) $(IGNORE_FILES), $(PP_FILES))
 
 # Get the list of directories
-ifdef DIRECTORIES
-_DIRECTORIES := $(DIRECTORIES)
-else
-_DIRECTORIES :=
-endif
-_DIRECTORIES += $(subst ./,, $(dir $(_FILES) $(_PP_FILES)))
-_DIRECTORIES := $(sort $(_DIRECTORIES))
+DIRECTORIES += $(subst ./,, $(dir $(FILES) $(PP_FILES)))
+DIRECTORIES := $(sort $(DIRECTORIES))
 
 # We export these variables for calling shell scripts
 # =============================================================================
@@ -195,7 +193,7 @@ export $(_DEFINED_VARS)
 # This target must not be overriden, but it should preceed each makefile that
 # overrides other targets (.pre_build, .post_build).
 build:: .check_dependencies clean $(_PACKAGE_BUILD_DIR) $(_TEMP_DIR) \
-			.pre_build .build_msg $(_DIRECTORIES) $(_FILES) $(_PP_FILES) \
+			.pre_build .build_msg $(DIRECTORIES) $(FILES) $(PP_FILES) \
 			.post_build 
 .build_msg:
 	@echo '> Starting build ...'
@@ -226,20 +224,20 @@ $(_TEMP_DIR):
 	@mkdir -p -- "$@"
 
 # Create directories
-$(_DIRECTORIES): .force
+$(DIRECTORIES): .force
 	@mkdir -p -v -- "$(_PACKAGE_BUILD_DIR)/$@"
 
 # Copy files
-$(_FILES): .force
+$(FILES): .force
 	@cp -v -p -- "$@" "$(_PACKAGE_BUILD_DIR)/$@"
 
 # Generate files 
-$(_PP_FILES): .force
+$(PP_FILES): .force
 	@echo ">> Preprocessing $@ ..."
 	@$(FILEPP) \
+		$(_FILEPP_DEFINES) \
 		$(_FILEPP_MODULE_DIRS) $(_FILEPP_MODULES) \
 		$(_FILEPP_INCLUDE) \
-		$(_FILEPP_DEFINES) \
 		-kc "$(FILEPP_PREFIX)" \
 		-ec "ENVIRONMENT." -e \
 		$(FILEPP_FLAGS) "$@" -o "$(_PACKAGE_BUILD_DIR)/$(subst .pp,,$@)"
@@ -282,7 +280,7 @@ install: .pre_install .install .post_install
 	done;
 	
 # Call 'diff' on files that would be modified
-ifeq ($(shell diff --help | grep -q -- --color && echo 1 || echo 0), 1)
+ifeq ($(shell diff --help 2>&1 | grep -q -- --color && echo 1 || echo 0), 1)
 _DIFF_PROGRAM = diff --color=always
 else
 _DIFF_PROGRAM = diff 
@@ -300,7 +298,7 @@ diff: .force
 		if [ -e "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" ]; then \
 			$(_DIFF_PROGRAM) -- \
 			"$$F" "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" || \
-				echo "... in $$F"; \
+				echo " ^--- in $$F"; \
 		else \
 			echo "$$F missing in $(ROOT_DIR)"; \
 		fi; \
@@ -318,19 +316,19 @@ info:
 help:
 	@echo "Usage: $(_MAKE_PROG) build|clean|diff|info|install"
 	@echo	
-	@echo "Type '$(_MAKE_PROG) help-variables' or '$(_MAKE_PROG) help-commands' for more help."
+	@echo "See '$(_MAKE_PROG) help-variables' or '$(_MAKE_PROG) help-commands' for more help."
 
 #! help-variables
 #!  Show help for variables
 help-variables:
 	@grep -h '^#\$$' -- $(_DOTFILE_MK) | \
-		sed -r -e 's/^#.//' -e 's/^ ([^ ])/\n\1/g'
+		sed -E -e 's/^#.//' -e 's/^ ([^ ])/\n\1/g'
 
 #! help-commands
 #!  Show help for commands
 help-commands:
 	@grep -h '^#!' -- $(_DOTFILE_MK) | \
-		sed -r -e 's/^#.//' -e 's/^ ([^ ])/\n\1/g'
+		sed -E -e 's/^#.//' -e 's/^ ([^ ])/\n\1/g'
 
 #! clean
 #!  Remove the build dir
