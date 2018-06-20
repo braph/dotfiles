@@ -34,7 +34,7 @@ db_file			         "MUSIC_BASE/.mpd/mpd.db"
 # The special value "syslog" makes MPD use the local syslog daemon. This
 # setting defaults to logging to syslog, otherwise logging is disabled.
 #
-log_file			         "/var/log/mpd.log"
+log_file			         "/tmp/.mpd.log"
 #
 # This setting sets the location of the file which stores the process ID
 # for use of mpd --kill and some init scripts. This setting is disabled by
@@ -47,7 +47,7 @@ log_file			         "/var/log/mpd.log"
 # it was brought down. This setting is disabled by default and the server 
 # state will be reset on server start up.
 #
-state_file			      "/var/lib/mpd/state"
+state_file			      "~/.config/mpd/state"
 #
 # The location of the sticker database.  This is a database which
 # manages dynamic information attached to songs.
@@ -208,7 +208,7 @@ input {
 audio_output {
 	type		"alsa"
 	name		"Alsa Output"
-   enabled  "yes"
+   enabled  "no"
 ##	device		"hw:0,0"	# optional
 ##	mixer_type      "hardware"	# optional
 ##	mixer_device	"default"	# optional
@@ -284,7 +284,7 @@ audio_output {
 audio_output {
 	type		"pulse"
 	name		"PulseAudio Output"
-   enabled  "no"
+   enabled  "yes"
 #	server		"remote_server"		# optional
 #	sink		"remote_server_sink"	# optional
 }
