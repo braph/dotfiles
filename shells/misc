@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Limit number of processes ####################################################
-#> if "OPERATING_SYSTEM" !~ /Cygwin/
+#> if "OPERATING_SYSTEM" !~ /Cygwin|Darwin/
 ulimit -u 2000
 #> endif
 
@@ -10,7 +10,9 @@ ulimit -u 2000
 set +H
 
 # Redraw within TMUX: ##########################################################
-trap 'eval $(resize)' WINCH
+if which resize 2>/dev/null >/dev/null; then
+   trap 'eval $(resize)' WINCH
+fi
 
 # Disable ^S/^Q ################################################################
 stty start '' stop ''
