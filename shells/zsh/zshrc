@@ -3,6 +3,7 @@
 #> include <vt>
 #> include <colors>
 #> include <path>
+#> include <zshzle>
 #> include <functions>
 #> include <exports>
 #> include <lang>
@@ -11,7 +12,6 @@
 #> include <zshprompt>
 #> include <zshcompletion>
 #> include <zshparam>
-#> include <zshzle>
 #> include <misc>
 #> include <hooks>
 #> include <init>

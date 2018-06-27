@@ -66,6 +66,23 @@ alias chmod='chmod -v PRESERVE_ROOT'
 alias chown='chown -v PRESERVE_ROOT'
 alias ln='ln -v -i'
 
+# Systemd #####################################################################
+alias sctl=systemctl
+alias jctl=journalctl
+#> if "SHELL_NAME" eq "zsh"
+compdef _systemctl sctl
+compdef _journalctl jctl
+#> elif "SHELL_NAME" eq "bash"
+complete -F _systemctl sctl
+complete -F _journalctl jctl
+_completion_loader systemctl
+_completion_loader journalctl
+#> endif
+
+# Sudo fix ####################################################################
+#  This enables resolution of shell aliases when using sudo
+alias sudo='sudo '
+
 # Don't create the annoying ~/.xsel.log file ##################################
 alias xsel='xsel -l /dev/null'
 

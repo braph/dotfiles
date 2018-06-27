@@ -10,6 +10,7 @@ ulimit -u 2000
 set +H
 
 # Redraw within TMUX: ##########################################################
+# TODO: write "which" command for filepp!
 if which resize 2>/dev/null >/dev/null; then
    trap 'eval $(resize)' WINCH
 fi

@@ -35,9 +35,10 @@
 #     zle -N zle-line-finish
 # fi
 
-autoload -U   edit-command-line
+autoload -U   edit-command-line compinit compdef
 zle -N        edit-command-line
 bindkey '\ee' edit-command-line
+compinit
 
 #> if SLOW_SYSTEM == 0
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null || \
