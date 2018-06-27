@@ -2,31 +2,17 @@
 #
 #> define RELOAD source-file ~/.tmux.conf
 
-### Our "perl-tmux-daemon"
-#
-#> define TMUX_DAEMON_BIN tmux_daemon.pl
-#> define TMUX_DAEMON_BIN_DIR ~/.tmux/bin
-#> if "HAVE_DEV_SHM" eq "1"
-	#> define TMUX_DAEMON_FIFO /dev/shm/$USER-tmux-daemon.fifo
-#> else
-	#> define TMUX_DAEMON_FIFO /tmp/.$USER-tmux-daemon.fifo
-#> endif
-#> define TMUX_DAEMON(_ACTION_) run -b 'echo _ACTION_ > TMUX_DAEMON_FIFO ;:'
-#
-# Also ensure that our demon is running:
-run 'pkill -U $USER -f TMUX_DAEMON_BIN &>/dev/null;:'
-run -b "TMUX_DAEMON_BIN_DIR/TMUX_DAEMON_BIN TMUX_DAEMON_FIFO &>/dev/null;:"
-
-
 # delete all keybindings
 unbind -a
-bind -n "'" TMUX_DAEMON(test)
 
 # enable mouse
 set -g mouse on
 
 # use ^a as prefix
 set -g prefix '^a'
+
+# use ^b as prefix if inside ssh
+if -F "#{SSH_CLIENT}" 'set -g prefix2 ^b' ''
 
 # use ^aa for sending ^a
 bind 'a' send-prefix
@@ -232,63 +218,41 @@ bind 'L'       select-pane -R
 bind '_'       split-window
 bind '|'       split-window -h
 
-# window moving
-bind 'm'       TMUX_DAEMON(move-window-interactive)
-
 # window selection
-bind ' '       choose-tree -u
+bind ' '       choose-tree
 bind '"'       choose-window
-bind '`'       TMUX_DAEMON(select-window 0)
-bind '1'       TMUX_DAEMON(select-window 1)
-bind '2'       TMUX_DAEMON(select-window 2)
-bind '3'       TMUX_DAEMON(select-window 3)
-bind '4'       TMUX_DAEMON(select-window 4)
-bind '5'       TMUX_DAEMON(select-window 5)
-bind '6'       TMUX_DAEMON(select-window 6)
-bind '7'       TMUX_DAEMON(select-window 7)
-bind '8'       TMUX_DAEMON(select-window 8)
-bind '9'       TMUX_DAEMON(select-window 9)
-bind '0'       TMUX_DAEMON(select-window 10)
-bind '-'       TMUX_DAEMON(select-window 11)
-bind '='       TMUX_DAEMON(select-window 12)
-bind 'BSpace'  TMUX_DAEMON(select-window 13)
-bind 'Home'    TMUX_DAEMON(select-window 14)
-bind 'End'     TMUX_DAEMON(select-window 15)
-bind 'F1'      TMUX_DAEMON(select-window 11)
-bind 'F2'      TMUX_DAEMON(select-window 12)
-bind 'F3'      TMUX_DAEMON(select-window 13)
-bind 'F4'      TMUX_DAEMON(select-window 14)
-bind 'F5'      TMUX_DAEMON(select-window 15)
-bind 'F6'      TMUX_DAEMON(select-window 16)
-bind 'F7'      TMUX_DAEMON(select-window 17)
-bind 'F8'      TMUX_DAEMON(select-window 18)
-bind 'F9'      TMUX_DAEMON(select-window 19)
-bind 'F10'     TMUX_DAEMON(select-window 20)
-bind 'F11'     TMUX_DAEMON(select-window 21)
-bind 'F12'     TMUX_DAEMON(select-window 22)
-
-# session selection
-#bind -T SeSe '`'     TMUX_DAEMON(select-session 0)
-#bind -T SeSe '1'     TMUX_DAEMON(select-session 1)
-#bind -T SeSe '2'     TMUX_DAEMON(select-session 2)
-#bind -T SeSe '3'     TMUX_DAEMON(select-session 3)
-#bind -T SeSe '4'     TMUX_DAEMON(select-session 4)
-#bind -T SeSe '5'     TMUX_DAEMON(select-session 5)
-#bind -T SeSe '6'     TMUX_DAEMON(select-session 6)
-#bind -T SeSe '7'     TMUX_DAEMON(select-session 7)
-#bind -T SeSe '8'     TMUX_DAEMON(select-session 8)
-#bind -T SeSe '9'     TMUX_DAEMON(select-session 9)
-#bind -T SeSe '0'     TMUX_DAEMON(select-session 10)
-#bind -T SeSe 'j'     TMUX_DAEMON(select-session -n)
-#bind -T SeSe 'k'     TMUX_DAEMON(select-session -p)
-#bind -T SeSe 'S'     choose-session
-#bind 'S'       switch-client -T SeSe
+bind '`'       select-window -t 0
+bind '1'       select-window -t 1
+bind '2'       select-window -t 2
+bind '3'       select-window -t 3
+bind '4'       select-window -t 4
+bind '5'       select-window -t 5
+bind '6'       select-window -t 6
+bind '7'       select-window -t 7
+bind '8'       select-window -t 8
+bind '9'       select-window -t 9
+bind '0'       select-window -t 10
+bind '-'       select-window -t 11
+bind '='       select-window -t 12
+bind 'BSpace'  select-window -t 13
+bind 'Home'    select-window -t 14
+bind 'End'     select-window -t 15
+bind 'F1'      select-window -t 11
+bind 'F2'      select-window -t 12
+bind 'F3'      select-window -t 13
+bind 'F4'      select-window -t 14
+bind 'F5'      select-window -t 15
+bind 'F6'      select-window -t 16
+bind 'F7'      select-window -t 17
+bind 'F8'      select-window -t 18
+bind 'F9'      select-window -t 19
+bind 'F10'     select-window -t 20
+bind 'F11'     select-window -t 21
+bind 'F12'     select-window -t 22
 
 bind '/'       command-prompt "find-window -TN %%"
 bind 'R'       move-window -r
 
-#bind 'f'       TMUX_DAEMON(history-forward)
-#bind 'b'       TMUX_DAEMON(history-backward)
 bind 'B'       move-window -t bg:
 
 bind '^a'      last-window
@@ -302,5 +266,7 @@ bind 'c'       neww
 #bind 'n'       neww "runner -H ~/.tmux/cmd_hist -P cmd"
 #bind 'r'       neww "runner -H ~/.tmux/cmd_hist -b -q -P cmd"
 
-# vim: set filetype=tmux.conf:
+# Run Tmux Perl Daemon
+run -b 'perl /home/braph/TO_PROJECT/tmuxperl/tmux_daemon.pl'
 
+# vim: set filetype=tmux.conf:
