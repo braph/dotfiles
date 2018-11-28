@@ -267,6 +267,6 @@ bind 'c'       neww
 #bind 'r'       neww "runner -H ~/.tmux/cmd_hist -b -q -P cmd"
 
 # Run Tmux Perl Daemon
-run -b 'perl /home/braph/TO_PROJECT/tmuxperl/tmux_daemon.pl'
+run -b 'tmux-daemon'
 
 # vim: set filetype=tmux.conf:
