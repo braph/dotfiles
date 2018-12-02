@@ -43,7 +43,7 @@ has_run() {
    # ======================================================
 
    # === Music Player Daemon ==============================
-   has_run mpd;
+   #has_run mpd;
 
    # === Our notification daemon ===
    has_run dunst;
@@ -52,12 +52,13 @@ has_run() {
    has_run imwheel;
 
    # === Disable touchpad while typing ===
-   has_run syndaemon -i 0.5 -t -K -R
+   #has_run syndaemon -i 0.5 -t -K -R
 
    # === Open browser =====================================
    #> ifndef STARTPAGE
    #>    define STARTPAGE blog.fefe.de
    #> endif
+   has_run bnox      "STARTPAGE" ||
    has_run inox      "STARTPAGE" ||
    has_run chromium  "STARTPAGE" ||
    has_run palemoon  "STARTPAGE" ||
@@ -88,9 +89,9 @@ has_run() {
       tmux has-session -t 'main' || tmux new-session -d -s 'main'
       tmux has-session -t 'bg'   || tmux new-session -d -s 'bg'
 
-      has ncmpcpp && tmux new-window -t 'main:' 'ncmpcpp'
-      { has finch   && tmux new-window -t 'main:' 'finch';   } ||
-      { has mcabber && tmux new-window -t 'main:' 'mcabber'; } 
+      #has ncmpcpp && tmux new-window -t 'main:' 'ncmpcpp'
+      #{ has finch   && tmux new-window -t 'main:' 'finch';   } ||
+      #{ has mcabber && tmux new-window -t 'main:' 'mcabber'; } 
 
       terminal_init='tmux -2 attach -t main'
    elif has zsh; then
