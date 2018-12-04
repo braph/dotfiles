@@ -9,11 +9,22 @@
 #> define SCROLL_BROWSER_LINES_SHIFT 1
 #> endif
 
+# List of all possible browser titles, separated by pipe (|)
+#> define BROWSERS \
+Palemoon|\
+Pale Moon|\
+Mozilla Firefox|\
+Firefox|\
+Chromium|\
+Inox|\
+Bnox|\
+Dillo
+
 # "Mozilla Firefox"
 # "Website Foo Bar - Mozilla Firefox"
 # "Website Foo Bar - Pale Moon"
 # "Website Foo Bar - Pale Moon (Private Browsing)"
-"^(.* - )?(Pale Moon|Palemoon|Mozilla Firefox|Firefox|Chromium|Inox|Bnox|Dillo)( \(Private Browsing\))?$"
+"^(.* - )?(BROWSERS)( \(Private Browsing\))?$"
 Control_L,  Up,   Control_L|plus 
 Control_L,  Down, Control_L|minus
 Shift_L,    Up,   Button4, SCROLL_BROWSER_LINES_SHIFT
