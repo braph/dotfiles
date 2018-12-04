@@ -13,7 +13,7 @@
 # "Website Foo Bar - Mozilla Firefox"
 # "Website Foo Bar - Pale Moon"
 # "Website Foo Bar - Pale Moon (Private Browsing)"
-"^(.* - )?(Pale Moon|Palemoon|Mozilla Firefox|Firefox|Chromium|Inox|Dillo)( \(Private Browsing\))?$"
+"^(.* - )?(Pale Moon|Palemoon|Mozilla Firefox|Firefox|Chromium|Inox|Bnox|Dillo)( \(Private Browsing\))?$"
 Control_L,  Up,   Control_L|plus 
 Control_L,  Down, Control_L|minus
 Shift_L,    Up,   Button4, SCROLL_BROWSER_LINES_SHIFT
