@@ -304,6 +304,15 @@ diff: .force
 		fi; \
 	done
 
+#! cat
+#!  Cat build files
+cat: .force
+	cd "$(_PACKAGE_BUILD_DIR)" || { \
+		echo "Did you run '$(_MAKE_PROG) build' yet?"; \
+		exit 1; \
+	}; \
+	find . -mindepth 1 -type f -print -exec cat -n {} \;
+
 #! info
 #!  Show a list of configuration variables in Makefile
 info:
@@ -314,7 +323,7 @@ info:
 #! help
 #!  Show help summary
 help:
-	@echo "Usage: $(_MAKE_PROG) build|clean|diff|info|install"
+	@echo "Usage: $(_MAKE_PROG) build|clean|cat|diff|info|install"
 	@echo	
 	@echo "See '$(_MAKE_PROG) help-variables' or '$(_MAKE_PROG) help-commands' for more help."
 
