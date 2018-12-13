@@ -1,0 +1,7 @@
+! 
+! Use this when you want to use the numpadkeys on the right
+! for PageUp (7, Pos1) and PageDown (4, LeftArrow)
+!
+
+keysym KP_Home = Prior
+keysym KP_Left = Next
