@@ -122,6 +122,10 @@ _PACKAGE_BUILD_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)
 # A directory that can be used for temp files in the build process
 _TEMP_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)-temp
 
+# Adjust PATH for using locally installed filepp
+PATH += :$(_PACKAGES_ROOT)/.filepp/bin
+export PATH
+
 # Collect the defines in Makefile, create a list of -D<defines>
 # =============================================================================
 
@@ -151,6 +155,7 @@ _FILEPP_INCLUDE := -I$(_PACKAGE_BUILD_DIR)
 #_FILEPP_INCLUDE += -I$(PRIVATE_DIR)
 #endif #XXX
 _FILEPP_INCLUDE += $(addprefix -I, $(FILEPP_INCLUDE))
+
 
 # File-selection logic starts here
 # =============================================================================
@@ -242,6 +247,13 @@ $(PP_FILES): .force
 		-ec "ENVIRONMENT." -e \
 		$(FILEPP_FLAGS) "$@" -o "$(_PACKAGE_BUILD_DIR)/$(subst .pp,,$@)"
 
+# Shell code for changing to _PACKAGE_BUILD_DIR
+.CD_TO_BUILD_DIR = \
+	cd "$(_PACKAGE_BUILD_DIR)" || { \
+		echo "Did you run '$(_MAKE_PROG) build' yet?"; \
+		exit 1; \
+	};
+
 #! check_dependencies
 #!  Check if all dependencies are installed
 check_dependencies: .check_dependencies
@@ -249,10 +261,16 @@ check_dependencies: .check_dependencies
 .SILENT:
 .check_dependencies::
 	echo -n "Checking for filepp ... "
-	which filepp
+	echo X | "$(FILEPP)" -DX="found" -c || { \
+		echo "Filepp binary '$(FILEPP)' not found."; \
+		echo "Please install it with your package-manager."; \
+		echo "Alternatively you can run $(_PACKAGES_ROOT)/.filepp/install_on_system.sh for a system-wide installation"; \
+		echo "or $(_PACKAGES_ROOT)/.filepp/install_locally.sh for an installation inside your dotfile-folder."; \
+		false; \
+	}
 	for M in $(FILEPP_MODULES); do \
 		echo -n "Checking for filepp module $$M ... "; \
-		echo OK | filepp -c $(_FILEPP_MODULE_DIRS) -m $$M || exit 1; \
+		echo OK | "$(FILEPP)" -c $(_FILEPP_MODULE_DIRS) -m $$M || exit 1; \
 	done
 
 #! install
@@ -262,10 +280,7 @@ install: .pre_install .install .post_install
 .install::
 	mkdir -p -- "$(ROOT_DIR)/$(PREFIX_DIR)"
 	
-	cd "$(_PACKAGE_BUILD_DIR)" || { \
-		echo "Did you run '$(_MAKE_PROG) build' yet?"; \
-		exit 1; \
-	}; \
+	$(.CD_TO_BUILD_DIR) \
 	\
 	find . -mindepth 1 -type d | sed 's|^./||' | while read -r D; do \
 		mkdir -p -- "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$D"; \
@@ -279,7 +294,7 @@ install: .pre_install .install .post_install
 		fi; \
 	done;
 	
-# Call 'diff' on files that would be modified
+# Check if diff supports color
 ifeq ($(shell diff --help 2>&1 | grep -q -- --color && echo 1 || echo 0), 1)
 _DIFF_PROGRAM = diff --color=always
 else
@@ -290,10 +305,7 @@ endif
 #!  Show the difference between newly generated files in the build directory
 #!  and the old files in the root directory.
 diff: .force
-	cd "$(_PACKAGE_BUILD_DIR)" || { \
-		echo "Did you run '$(_MAKE_PROG) build' yet?"; \
-		exit 1; \
-	}; \
+	$(.CD_TO_BUILD_DIR) \
 	find . -mindepth 1 -type f | sed 's|^./||' | while read -r F; do \
 		if [ -e "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" ]; then \
 			$(_DIFF_PROGRAM) -- \
@@ -307,10 +319,7 @@ diff: .force
 #! cat
 #!  Cat build files
 cat: .force
-	cd "$(_PACKAGE_BUILD_DIR)" || { \
-		echo "Did you run '$(_MAKE_PROG) build' yet?"; \
-		exit 1; \
-	}; \
+	$(.CD_TO_BUILD_DIR) \
 	find . -mindepth 1 -type f -print -exec cat -n {} \;
 
 #! info
