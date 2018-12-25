@@ -123,7 +123,7 @@ _PACKAGE_BUILD_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)
 _TEMP_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)-temp
 
 # Adjust PATH for using locally installed filepp
-PATH += :$(_PACKAGES_ROOT)/.filepp/bin
+PATH := $(PATH):$(_PACKAGES_ROOT)/.filepp/bin
 export PATH
 
 # Collect the defines in Makefile, create a list of -D<defines>
