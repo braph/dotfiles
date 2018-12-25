@@ -30,6 +30,7 @@
 
 # Parameters for building/installing an dotfile package
 # =============================================================================
+TMPDIR ?= /tmp
 
 #$ ROOT_DIR
 #$  Output destination for 'make install'.
@@ -37,7 +38,7 @@ ROOT_DIR ?= $(HOME)
 
 #$ BUILD_DIR
 #$  Output destination for 'make build'.
-BUILD_DIR ?= /tmp/dotfiles-$(USER)
+BUILD_DIR ?= $(TMPDIR)/dotfiles-$(USER)
 
 #$ PRIVATE_DIR
 #$  Directory to retrieve private information from inside preprocessor-files.
