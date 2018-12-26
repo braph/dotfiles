@@ -1,3 +1,10 @@
+# substitute variables inside prompt
+setopt promptsubst
+
+#> define TOR_STATUS ${LD_PRELOAD/*torsocks*/%F{red\}%B+TOR %f%b}
+#> define SSH_STATUS ${SSH_CLIENT/*?/%F{red\}%B+SSH %f%b}
+#> define _STATUSES_ TOR_STATUS ## SSH_STATUS
+
 #> if "PROMPT_STYLE" eq "PROMPT_1"
 PROMPT="\
 %F{white}%K{black} %n %f%k\
@@ -17,7 +24,7 @@ RPROMPT="\
  [%l]"
 #> elif "PROMPT_STYLE" eq "MOSTLY_RIGHT"
 PROMPT=' %3~ %(!.%F{red}.%F{green})>%f '                                                        
-RPROMPT='%F{white}%U%n@%m%u%f [%*] [%(?.%F{green}.%F{red})%?%k%f] [%l]'
+RPROMPT='_STATUSES_%F{white}%U%n@%m%u%f [%*] [%(?.%F{green}.%F{red})%?%k%f] [%l]'
 #> else
 #> error "Unknown parameter for PROMPT_STYLE"
 #> endif
