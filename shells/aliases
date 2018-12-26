@@ -118,7 +118,7 @@ alias inox-messenger="
    inox --user-data-dir=$HOME/.browsers/inox-messenger"
 
 #> define COLORIZE_EXCLUDE wget|ls|ulimit|grep|dmesg
-#> define COLORIZE_ALIAS_FILE "/tmp/.$USER.zsh.coloraliases"
+#> define COLORIZE_ALIAS_FILE "${TMPDIR:-/tmp}/.$USER.zsh.coloraliases"
 
 __colorize_alias() {
    local name=$1; shift

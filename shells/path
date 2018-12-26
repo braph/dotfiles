@@ -8,7 +8,7 @@
 #> define PREPEND_IF(_DIR_) IF_DIR(_DIR_, PATH_PREPEND(_DIR_))
 #> define APPEND_IF(_DIR_)  IF_DIR(_DIR_, PATH_APPEND(_DIR_))
 
-export PATH='/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/games:/opt'
+export PATH="$PATH:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/games:/opt"
 
 # arch linux
 #  export PATH='/bin:/usr/local/bin:/usr/local/sbin'
