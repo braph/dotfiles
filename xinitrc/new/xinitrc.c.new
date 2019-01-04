@@ -1,0 +1,175 @@
+#include "/tmp/sss/sss.c"
+
+#define WINDOW_MANAGER "openbox"
+
+int has(String command) {
+   return $("which", command);
+}
+
+int run(Strings args) {
+   if (! fork())
+      ExecArray(args);
+   return 1;
+}
+
+#define has_run(X...) _has_run(Strings(X))
+int _has_run(Strings argv) {
+   return (has($0) && run(argv));
+}
+
+/*
+#define has_run(args...) _has_run(args)
+BeginFunction(_has_run)
+   if (has(args[0])) {
+      run(args);
+      Return(1);
+   }
+
+   Return(0);
+EndFunction();
+*/
+
+Begin
+   String LogFile = String("/tmp/xinitrc.%s.%d.log", $USER, $$);
+   //String LogFile = "/dev/null";
+   //ErrToFile(LOG_FILE);
+   //OutToFile(LOG_FILE);
+
+   X("date"); // date for log file
+
+   // === Dirs that we want to keep in /tmp ================
+   String UserTempDir = String("/tmp/home-temp-%s", $USER);
+
+   // TODO? mozilla stuff?
+   // .cache \
+
+   Foreach(dir, Strings(".adobe", ".macromedia"))
+      Echo("Linking %s to temp", dir);
+      $("rm", "-rf", "%s/%s",          FORMAT($HOME, dir));
+      $("mkdir", "-p", "%s/%s",        FORMAT(UserTempDir, dir)) &&
+      $("chmod", "0755", "%s/%s",      FORMAT(UserTempDir, dir)) &&
+      $("ln", "-s", "%s/%s", "%s/%s",  FORMAT(UserTempDir, dir, $HOME, dir));
+   Done
+   // ======================================================
+   //
+
+      $(CMD(rm, -rf, %s/%s), ARGS($HOME, dir), OUT(out), ERR(err));
+
+      $(ln, -s, $UserTempDir/$dir, $HOME/$dir);
+
+      
+      $(S(rm, -rf, %s/%s),             FORMAT($HOME, dir));
+      $(S(ln, -s, %s/%s, %s/%s),  ARGS(UserTempDir, dir, $HOME, dir));
+
+   // === Music Player Daemon ==============================
+   has_run("mpd");
+
+   // === Our notification daemon ===
+   has_run("dunst");
+
+   // === Remap Mousebuttons ===
+   has_run("imwheel");
+
+   // === Disable touchpad while typing ===
+   has_run(S(syndaemon, -i, 0.5, -t, -K, -R);
+
+   // === Open browser =====================================
+#ifndef STARTPAGE
+#  define STARTPAGE blog.fefe.de
+#endif
+   has_run("bnox"     , "STARTPAGE") ||
+   has_run("inox"     , "STARTPAGE") ||
+   has_run("chromium" , "STARTPAGE") ||
+   has_run("palemoon" , "STARTPAGE") ||
+   has_run("firefox"  , "STARTPAGE") ||
+   has_run("dillo"    , "STARTPAGE") ;
+
+   // === Host based applications ==========================
+#if HOST == pizwo
+    // has_run synergys
+#elif HOST == samsung
+    // has_run synergyc 10.0.0.10
+#endif
+
+   // === Select terminal emulator =========================
+   String terminal_cmd = (
+      has("uxterm")      ?  "uxterm -maximized -e" :
+      has("xterm")       ?  "xterm -maximized -e"  :
+      has("evilvte")     ?  "evilvte -f -e"        :
+      has("terminator")  ?  "terminator -f -b -x"  :
+                            "echo no terminal emulator found"
+   );
+   // ======================================================
+
+   // === Select terminal init =============================
+   String terminal_init;
+
+   If has("tmux") Then
+      If ! $("tmux", "has-session", "-t", "main") Then
+         $("tmux", "new-session", "-d", "-s", "main");
+      Fi
+
+      If ! $("tmux", "has-session", "-t", "bg") Then
+         $("tmux", "new-session", "-d", "-s", "bg");
+      Fi
+
+      // has ncmpcpp && tmux new-window -t 'main:' 'ncmpcpp'
+      // { has finch   && tmux new-window -t 'main:' 'finch';   } ||
+      // { has mcabber && tmux new-window -t 'main:' 'mcabber'; } 
+
+      terminal_init = "tmux -2 attach -t main";
+   Elif has("zsh") Then
+      terminal_init = "zsh";
+   Else
+      terminal_init = "bash";
+   Fi
+   // ======================================================
+
+   // === Wait for window manager ==========================
+   // sleep 2;
+   // ======================================================
+
+   // === initialize X11 stuff =============================
+   // Disable beep
+   Exec("xset", "-b");
+
+   // load Xresources
+   If FileExists("~/.Xresources") Then
+      has_run("xrdb", "~/.Xresources");
+   Fi
+
+   // Set background to 'nearly black' (hack for fucking flash player)
+   has_run("xsetroot", "-solid", "#000001");
+
+   // Modify keyboard layout
+   If FileExists("~/.Xmodmap") Then
+      has_run("xmodmap", "~/.Xmodmap");
+   Fi
+
+   // Load additional keybindings
+   If FileExists("~/.xbindkeysrc") Then
+      has_run("xbindkeys");
+   Fi
+
+   // xset/setxkbmap
+   has_run("xset_daemon");
+
+   // Set background image if available
+   has_run("nitrogen", "--restore");
+
+   // Redshift
+   has_run("redshift");
+
+   // Set up our screensaver
+   has_run("xscreensaver", "-no-splash");
+   //xset dpms 0 0 $(( 60 * 10 ))
+   //xscreensaver-command -lock
+   // ======================================================
+
+   // === Start terminal emulator ==========================
+   sleep(1); 
+
+   Sh("%s %s", Format, terminal_cmd, terminal_init);
+
+   execlp(WINDOW_MANAGER, NULL);
+End
