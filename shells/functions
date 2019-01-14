@@ -39,7 +39,11 @@ freetop() {
 
 gclone() {
    local repo=$1; shift
-   git clone https://github.com/braph/$repo "$@"
+   if expr index "$repo" "/" >/dev/null; then
+      git clone "$repo" "$@"
+   else
+      git clone https://github.com/braph/$repo "$@"
+   fi
 }
 
 gcommit() {
