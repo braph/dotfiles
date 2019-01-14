@@ -46,6 +46,14 @@ gclone() {
    fi
 }
 
+gacp() {
+   set -- $( git status -s | grep '^ *M' | sed 's/ *M* *//' )
+   local files_msg=$( echo "$@" | tr ' ' ',' )
+   git add "$@"
+   git commit -m "changed $files_msg"
+   git push
+}
+
 gcommit() {
    git add . && git commit -m "$1"
 }
