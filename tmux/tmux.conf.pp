@@ -249,6 +249,8 @@ bind 'F9'      select-window -t 19
 bind 'F10'     select-window -t 20
 bind 'F11'     select-window -t 21
 bind 'F12'     select-window -t 22
+bind 'IC'      select-window -t 23 # Insert, laptop
+bind 'DC'      select-window -t 24 # Delete, laptop
 
 bind '/'       command-prompt "find-window -TN %%"
 bind 'R'       move-window -r
