@@ -50,6 +50,10 @@ gcommit() {
    git add . && git commit -m "$1"
 }
 
+gstatus() {
+   git status
+}
+
 aurclone() {
    git clone ssh://aur@aur.archlinux.org/$1
 }
