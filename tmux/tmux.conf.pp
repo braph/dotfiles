@@ -34,8 +34,8 @@ set -g status-right-style 'bg=black,fg=white'
 set -g status-left ' '
 set -g status-left-length 0
 
-set -g status-right '%T'
-set -g status-right-length 10
+set -g status-right "%T#(sed 's/^/ /; s/$/%/' /sys/class/power_supply/BAT0/capacity)"
+#set -g status-right-length 
 
 set -g window-status-format "#I:#W"
 set -g window-status-style  'bg=black,fg=THEME_COLOR'
