@@ -34,13 +34,13 @@ set -g status-right-style 'bg=black,fg=white'
 set -g status-left ' '
 set -g status-left-length 0
 
-set -g status-right "%T#(sed 's/^/ /; s/$/%/' /sys/class/power_supply/BAT0/capacity)"
+set -g status-right "#[fg=magenta]%H#[fg=blue]%M#[fg=cyan]%S#[fg=black,bold]#(sed 's/^//; s/$/%/' /sys/class/power_supply/BAT0/capacity)"
 #set -g status-right-length 
 
-set -g window-status-format "#I:#W"
-set -g window-status-style  'bg=black,fg=THEME_COLOR'
+set -g window-status-format "#I#[fg=THEME_COLOR]#W"
+set -g window-status-style  'bg=black,fg=black,bold'
 
-set -g window-status-current-format "#I:#W"
+set -g window-status-current-format "#I#[fg=white]#W"
 set -g window-status-current-style  'bg=black,fg=white,bold'
 
 set -g window-status-last-style 'bg=black,fg=white'
