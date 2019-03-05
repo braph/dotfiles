@@ -41,8 +41,8 @@ set hlsearch
 set autoindent
 set cindent
 
-set tabstop=3
-set shiftwidth=3
+set tabstop=2
+set shiftwidth=2
 set expandtab
 
 set mouse=n
