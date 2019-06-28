@@ -310,7 +310,7 @@ diff: .force
 	find . -mindepth 1 -type f | sed 's|^./||' | while read -r F; do \
 		if [ -e "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" ]; then \
 			$(_DIFF_PROGRAM) -- \
-			"$$F" "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" || \
+			"$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" "$$F" || \
 				echo " ^--- in $$F"; \
 		else \
 			echo "$$F missing in $(ROOT_DIR)"; \
