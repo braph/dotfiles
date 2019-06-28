@@ -44,7 +44,7 @@ gclone() {
 
    local repo=$1; shift
    if expr index "$repo" "/" >/dev/null; then
-      if expr index "$repo" "://" >/dev/null; then
+      if expr index "$repo" ":" >/dev/null; then
          git clone "$repo" "$@"
       else
          git clone "https://github.com/$repo" "$@"
