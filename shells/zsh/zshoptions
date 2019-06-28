@@ -669,7 +669,7 @@ setopt INTERACTIVE_COMMENTS
 # RM_STAR_SILENT (-H) <K> <S>
 # Do not query the user before executing `rm *' or `rm path/*'.
 
-setopt RM_STAR_WAIT
+unsetopt RM_STAR_WAIT
 # RM_STAR_WAIT
 # If querying the user before executing `rm *' or `rm path/*', first wait ten seconds  and  ignore
 # anything  typed  in  that  time.   This avoids the problem of reflexively answering `yes' to the
@@ -829,7 +829,7 @@ setopt PROMPT_PERCENT
 # out this option, such a history reference refers to the same event as the previous history  ref‐
 # erence, defaulting to the previous command.
 
-#unsetopt CSH_JUNKIE_LOOPS
+setopt CSH_JUNKIE_LOOPS
 # CSH_JUNKIE_LOOPS <C>
 # Allow loop bodies to take the form `list; end' instead of `do list; done'.
 
