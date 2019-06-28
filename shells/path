@@ -18,5 +18,6 @@ PATH_PREPEND($HOME/scripts)
 PATH_PREPEND(/usr/bin/core_perl:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/share/perl5/vendor_perl)
 PATH_PREPEND(GEMPATH)
 PATH_APPEND(/opt/vc/bin)
+PATH_APPEND($HOME/pscripts)
 
 # vim: ft=sh
