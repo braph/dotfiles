@@ -21,12 +21,12 @@ COLORIZE_CW = 1
 	fi
 
 .pre_build:: .vt_palette
-	./tools/zsh_trim_setopts.sh zshoptions "$(_PACKAGE_BUILD_DIR)/zshoptions"
+	./tools/zsh_trim_setopts.sh zshoptions "$(_TEMP_DIR)/zshoptions"
 	#./tools/zsh_trim_aliases.sh zsh
 
 PP_FILES = zshrc
 FILEPP_MODULES = hash-comment.pm remove-empty-lines.pm
-FILEPP_INCLUDE = . .. $(_TEMP_DIR)
+FILEPP_INCLUDE = $(_TEMP_DIR) . ..
 REMOVE_WHITESPACE_LINES = 1 # remove-empty-lines param
 
 include ../../dotfile.mk
