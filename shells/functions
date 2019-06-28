@@ -38,11 +38,19 @@ freetop() {
 }
 
 gclone() {
+   # gclone <REPO>        => git clone https://github.com/braph/<REPO>
+   # gclone <USER>/<REPO> => git clone https://github.com/<USER>/<REPO>
+   # gclone <URL>         => git clone <URL>
+
    local repo=$1; shift
    if expr index "$repo" "/" >/dev/null; then
-      git clone "$repo" "$@"
+      if expr index "$repo" "://" >/dev/null; then
+         git clone "$repo" "$@"
+      else
+         git clone "https://github.com/$repo" "$@"
+      fi
    else
-      git clone https://github.com/braph/$repo "$@"
+      git clone "https://github.com/braph/$repo" "$@"
    fi
 }
 
