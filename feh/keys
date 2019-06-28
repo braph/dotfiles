@@ -32,7 +32,7 @@ quit Q
 
 reload_image r
 
-save_image S
+save_image C-s
 
 toggle_fullscreen f
 
