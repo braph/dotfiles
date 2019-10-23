@@ -296,11 +296,8 @@ install: .pre_install .install .post_install
 	done;
 	
 # Check if diff supports color
-ifeq ($(shell diff --help 2>&1 | grep -q -- --color && echo 1 || echo 0), 1)
-_DIFF_PROGRAM = diff --color=always
-else
 _DIFF_PROGRAM = diff 
-endif
+_DIFF_COLOR = $(shell diff --help 2>&1 | grep -q -- --color && echo --color=always)
 
 #! diff
 #!  Show the difference between newly generated files in the build directory
@@ -309,7 +306,7 @@ diff: .force
 	$(.CD_TO_BUILD_DIR) \
 	find . -mindepth 1 -type f | sed 's|^./||' | while read -r F; do \
 		if [ -e "$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" ]; then \
-			$(_DIFF_PROGRAM) -- \
+			$(_DIFF_PROGRAM) $(_DIFF_COLOR) -- \
 			"$(ROOT_DIR)/$(PREFIX_DIR)/$(FILE_PREFIX)$$F" "$$F" || \
 				echo " ^--- in $$F"; \
 		else \
