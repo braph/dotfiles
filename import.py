@@ -47,7 +47,7 @@ def import_rc(
         if len(parts) == 1:
             if not parts[0].startswith('.'):
                 raise Exception("File does not start with a dot: %s" % f)
-            else
+            else:
                 pkg_name = get_package_name(parts[0])
                 pkg_files[f] = parts[0][1:]
         elif len(parts) == 2:
@@ -68,13 +68,18 @@ def import_rc(
                 raise Exception("Directory does not start with a dot: %s" % f)
             else:
                 pkg_name = get_package_name(parts[0])
-                pkg_files ... todo
+                #pkg_files ... todo
         elif len(parts) == 2:
             pass
         else:
             raise Exception("")
+    elif os.path.islink(f):
+        print('islink')
     else:
         raise Exception("Not a file or a dir: %s" % f)
+
+    print(pkg_name, pkg_files)
+    print(makefile_lines)
 
 options = argp.parse_args()
 
