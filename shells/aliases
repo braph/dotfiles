@@ -110,6 +110,7 @@ alias man="man -r ' Manual page \$MAN_PN line %lt?L/%L.:byte %bB?s/%s..? (END):?
 alias openports='netstat --all --numeric --programs --inet'
 alias killflash='pkill -f flash'
 alias dis='bg;disown'
+alias pip='pip --disable-pip-version-check'
 
 # browsers ####################################################################
 alias inox-facebook="
