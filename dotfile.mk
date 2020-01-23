@@ -114,14 +114,14 @@ endif
 # =============================================================================
 
 _MAKE_PROG := $(notdir $(MAKE))
-_DOTFILE_MK = $(realpath $(filter %dotfile.mk, $(MAKEFILE_LIST)))
-_PACKAGES_ROOT = $(dir $(_DOTFILE_MK))
+_DOTFILE_MK := $(realpath $(filter %dotfile.mk, $(MAKEFILE_LIST)))
+_PACKAGES_ROOT := $(dir $(_DOTFILE_MK))
 _PACKAGE_PATH := $(realpath .)
 _PACKAGE_NAME := $(notdir $(_PACKAGE_PATH))
-_PACKAGE_BUILD_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)
+_PACKAGE_BUILD_DIR := $(BUILD_DIR)/$(_PACKAGE_NAME)
 
 # A directory that can be used for temp files in the build process
-_TEMP_DIR = $(BUILD_DIR)/$(_PACKAGE_NAME)-temp
+_TEMP_DIR := $(BUILD_DIR)/$(_PACKAGE_NAME)-temp
 
 # Adjust PATH for using locally installed filepp
 PATH := $(PATH):$(_PACKAGES_ROOT)/.filepp/bin
@@ -131,7 +131,7 @@ export PATH
 # =============================================================================
 
 # Additional variables that should be passed to preprocessor
-_ADDITIONAL_DEFINES = HOST OPERATING_SYSTEM PRIVATE_DIR _TEMP_DIR \
+_ADDITIONAL_DEFINES := HOST OPERATING_SYSTEM PRIVATE_DIR _TEMP_DIR \
 								_PACKAGE_NAME _PACKAGE_PATH _PACKAGE_BUILD_DIR
 
 # Ignore these variables found in Makfile
