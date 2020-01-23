@@ -1,3 +1,7 @@
+#> ifndef THEME_COLOR
+#> define THEME_COLOR blue
+#> endif
+
 ### Fields ###
 field birthday = "Geburtstag", date
 field notes_list = "Notizen", list
