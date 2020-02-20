@@ -29,6 +29,9 @@ TERM*geomentry: 120x80
 TERM*scrollBar: false
 TERM*saveLines: 0
 
+! Very important, do not hang if many lines are written
+TERM*fastScroll: True
+
 ! Font
 TERM*faceName:  Hack:size=FONTSIZE
 !TERM*.faceName:  xft:DejaVu Sans Mono:size=FONTSIZE
