@@ -3,7 +3,7 @@
 #> endif
 
 ! ======== General Terminal Settings ===========
-#> foreach TERM xterm, UXTerm
+#> foreach TERM xterm, UXTerm, URxvt
 
 ! Cursor
 TERM*cursorColor: Red
@@ -31,6 +31,7 @@ TERM*saveLines: 0
 
 ! Very important, do not hang if many lines are written
 TERM*fastScroll: True
+TERM*jumpScroll: True
 
 ! Font
 TERM*faceName:  Hack:size=FONTSIZE
