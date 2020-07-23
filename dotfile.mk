@@ -30,7 +30,24 @@
 
 # Parameters for building/installing an dotfile package
 # =============================================================================
-TMPDIR ?= /tmp
+
+ifdef TMPDIR
+TMPDIR := $(TMPDIR)
+else
+ifdef TMP
+TMPDIR := $(TMP)
+else
+ifdef TEMP
+TMPDIR := $(TEMP)
+else
+ifdef TEMPDIR
+TMPDIR := $(TEMPDIR)
+else
+TMPDIR := /tmp
+endif
+endif
+endif
+endif
 
 #$ ROOT_DIR
 #$  Output destination for 'make install'.
@@ -57,11 +74,11 @@ endif
 
 #$ FILEPP
 #$  Name of the 'filepp' binary
-FILEPP 			?= filepp
+FILEPP ?= filepp
 
 #$ FILEPP_PREFIX
 #$  Prefix for recognizing preprocessor directives. Option '-kc'
-FILEPP_PREFIX 	?= \#>
+FILEPP_PREFIX ?= \#>
 
 #$ FILEPP_MODULES
 #$  Modules to use in filepp
@@ -113,11 +130,11 @@ endif
 # prefixed with an underscore.
 # =============================================================================
 
-_MAKE_PROG := $(notdir $(MAKE))
-_DOTFILE_MK := $(realpath $(filter %dotfile.mk, $(MAKEFILE_LIST)))
-_PACKAGES_ROOT := $(dir $(_DOTFILE_MK))
-_PACKAGE_PATH := $(realpath .)
-_PACKAGE_NAME := $(notdir $(_PACKAGE_PATH))
+_MAKE_PROG			 := $(notdir $(MAKE))
+_DOTFILE_MK			 := $(realpath $(filter %dotfile.mk, $(MAKEFILE_LIST)))
+_PACKAGES_ROOT 	 := $(dir $(_DOTFILE_MK))
+_PACKAGE_PATH  	 := $(realpath .)
+_PACKAGE_NAME		 := $(notdir $(_PACKAGE_PATH))
 _PACKAGE_BUILD_DIR := $(BUILD_DIR)/$(_PACKAGE_NAME)
 
 # A directory that can be used for temp files in the build process
@@ -259,17 +276,16 @@ $(PP_FILES): .force
 #!  Check if all dependencies are installed
 check_dependencies: .check_dependencies
 
-.SILENT:
 .check_dependencies::
-	echo -n "Checking for filepp ... "
-	echo X | "$(FILEPP)" -DX="found" -c || { \
+	@echo -n "Checking for filepp ... "
+	@echo X | "$(FILEPP)" -DX="found" -c || { \
 		echo "Filepp binary '$(FILEPP)' not found."; \
 		echo "Please install it with your package-manager."; \
 		echo "Alternatively you can run $(_PACKAGES_ROOT)/.filepp/install_on_system.sh for a system-wide installation"; \
 		echo "or $(_PACKAGES_ROOT)/.filepp/install_locally.sh for an installation inside your dotfile-folder."; \
-		false; \
+		exit 1; \
 	}
-	for M in $(FILEPP_MODULES); do \
+	@for M in $(FILEPP_MODULES); do \
 		echo -n "Checking for filepp module $$M ... "; \
 		echo OK | "$(FILEPP)" -c $(_FILEPP_MODULE_DIRS) -m $$M || exit 1; \
 	done
@@ -331,7 +347,7 @@ info:
 #!  Show help summary
 help:
 	@echo "Usage: $(_MAKE_PROG) build|clean|cat|diff|info|install"
-	@echo	
+	@echo
 	@echo "See '$(_MAKE_PROG) help-variables' or '$(_MAKE_PROG) help-commands' for more help."
 
 #! help-variables
