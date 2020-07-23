@@ -3,7 +3,8 @@
 unset CDPATH
 set +o histexpand # -u
 
-LOG_DIR="/tmp/dotfiles-$USER.logs"
+TMPDIR=${TMPDIR:-${TMP:-${TEMP:-${TEMPDIR:-/tmp}}}}
+LOG_DIR="$TMPDIR/dotfiles-$USER.logs"
 CURRENT_DIR=$(pwd)
 declare -a VARIABLES=()
 declare -a FILES=()
@@ -15,13 +16,13 @@ elif which make &>/dev/null && make --version | grep -q 'GNU'; then
 	MAKE=make
 else
 	echo "Could not find GNU make" >&2
-   exit 1;
+  exit 1
 fi
 
 rm -rf "$LOG_DIR"
 mkdir -p "$LOG_DIR" || {
    echo "Could not create log dir" >&2
-   exit 1;
+   exit 1
 }
 
 ACTION=$1; shift
@@ -29,7 +30,8 @@ if [[ "$ACTION" != "diff" ]] && \
    [[ "$ACTION" != "info" ]] && \
    [[ "$ACTION" != "build" ]] && \
    [[ "$ACTION" != "install" ]]; then
-   echo "Unknown command: $ACTION"
+   echo "Unknown command: $ACTION" >&2
+   exit 1
 fi
 
 for arg; do
