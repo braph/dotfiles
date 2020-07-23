@@ -1,16 +1,16 @@
 # dotfile.mk - generate and install customizable dotfiles
 # Copyright (C) 2017 Benjamin Abendroth
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -42,7 +42,7 @@ BUILD_DIR ?= $(TMPDIR)/dotfiles-$(USER)
 
 #$ PRIVATE_DIR
 #$  Directory to retrieve private information from inside preprocessor-files.
-PRIVATE_DIR ?= 
+PRIVATE_DIR ?=
 
 #$ PREFIX_DIR
 #$  Prefix directory, use this to place files in a ~/.subdirectory/
@@ -92,7 +92,7 @@ FILES ?=
 
 #$ PP_FILES
 #$  Files that should be passed to the preprocessor
-PP_FILES ?= 
+PP_FILES ?=
 
 #$ DIRECTORIES
 #$  Additional directories to be created
@@ -200,7 +200,7 @@ export $(_DEFINED_VARS)
 # overrides other targets (.pre_build, .post_build).
 build:: .check_dependencies clean $(_PACKAGE_BUILD_DIR) $(_TEMP_DIR) \
 			.pre_build .build_msg $(DIRECTORIES) $(FILES) $(PP_FILES) \
-			.post_build 
+			.post_build
 .build_msg:
 	@echo '> Starting build ...'
 
@@ -237,7 +237,7 @@ $(DIRECTORIES): .force
 $(FILES): .force
 	@cp -v -p -- "$@" "$(_PACKAGE_BUILD_DIR)/$@"
 
-# Generate files 
+# Generate files
 $(PP_FILES): .force
 	@echo ">> Preprocessing $@ ..."
 	@$(FILEPP) \
@@ -296,7 +296,7 @@ install: .pre_install .install .post_install
 	done;
 	
 # Check if diff supports color
-_DIFF_PROGRAM = diff 
+_DIFF_PROGRAM = diff
 _DIFF_COLOR = $(shell diff --help 2>&1 | grep -q -- --color && echo --color=always)
 
 #! diff
