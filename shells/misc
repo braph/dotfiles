@@ -2,7 +2,7 @@
 
 # Limit number of processes ####################################################
 #> if "OPERATING_SYSTEM" !~ /Cygwin|Darwin/
-ulimit -u 2000
+ulimit -u 8000
 #> endif
 
 # Disable history expansion ####################################################
