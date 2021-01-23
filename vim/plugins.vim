@@ -8,6 +8,7 @@ Plugin 'gnupg'
 
 Plugin 'keith/swift.vim'
 Plugin 'zzeroo/vim-vala'
+Plugin 'ycm-core/YouCompleteMe'
 
 Plugin 'justinmk/vim-syntax-extra'
 Plugin 'chrisbra/Recover.vim'
