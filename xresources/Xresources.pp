@@ -2,6 +2,10 @@
 #> define FONTSIZE 13
 #> endif
 
+! ======== X11 Cursor ==========================
+Xcursor.theme: oxy-steel
+Xcursor.size:  32
+
 ! ======== General Terminal Settings ===========
 #> foreach TERM xterm, UXTerm, URxvt
 
