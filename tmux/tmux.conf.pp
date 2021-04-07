@@ -8,6 +8,9 @@ unbind -a
 # enable mouse
 set -g mouse on
 
+# more scrollback
+set -g history-limit 32786
+
 # use ^a as prefix
 set -g prefix '^a'
 
