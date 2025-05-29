@@ -54,7 +54,7 @@ cmd_install() {
   ensure_package_count "$#"
 
   for package; do
-    ensure_package "$package" && "./$package/package.sh" build
+    ensure_package "$package" && "./$package/package.sh" install
   done
 }
 
@@ -70,7 +70,7 @@ cmd_apply() {
   ensure_package_count "$#"
 
   for package; do
-    ensure_package "$package" && "./$package/package.sh" diff
+    ensure_package "$package" && "./$package/package.sh" apply
   done
 }
 
@@ -78,7 +78,7 @@ cmd_show() {
   ensure_package_count "$#"
 
   for package; do
-    ensure_package "$package" && "./$package/package.sh" diff
+    ensure_package "$package" && "./$package/package.sh" show
   done
 }
 
