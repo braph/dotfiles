@@ -1,0 +1,88 @@
+#!/bin/bash
+
+uri_escape() {
+   perl -MURI::Escape=uri_escape -ne 'print uri_escape($_)';
+}
+
+uri_unescape() {
+   perl -MURI::Escape=uri_unescape -ne 'print uri_unescape($_)';
+}
+
+escapeshellarg() {
+   printf '%q' "$@"
+}
+
+vimake() {
+   vim +"set noexpandtab" "${@:-Makefile}"
+}
+
+mysql_date() {
+   date "+%Y-%m-%d %H:%M:%S" "$@"
+}
+
+hdplayer() {
+   nice -n 0 -- \
+   mplayer \
+    -vfm ffmpeg \
+    -lavdopts lowres=0:fast:skiploopfilter=all:threads=8 \
+    -framedrop \
+    "$@"
+}
+
+md() {
+   mkdir -p "$1" && cd "$1"
+}
+
+freetop() {
+   ps -e -o pid,vsz,comm= | sort -n -k 2
+}
+
+gclone() {
+   # gclone <REPO>        => git clone https://github.com/braph/<REPO>
+   # gclone <USER>/<REPO> => git clone https://github.com/<USER>/<REPO>
+   # gclone <URL>         => git clone <URL>
+
+   local repo=$1; shift
+   if expr index "$repo" "/" >/dev/null; then
+      if expr index "$repo" ":" >/dev/null; then
+         git clone "$repo" "$@"
+      else
+         git clone "https://github.com/$repo" "$@"
+      fi
+   else
+      git clone "https://github.com/braph/$repo" "$@"
+   fi
+}
+
+gacp() {
+   set -- $( git status -s | grep '^ *M' | sed 's/ *M* *//' )
+   local files_msg=$( echo "$@" | tr ' ' ',' )
+   git add "$@"
+   git commit -m "changed $files_msg"
+   git push
+}
+
+gcommit() {
+   git add . && git commit -m "$1"
+}
+
+gstatus() {
+   git status
+}
+
+aurclone() {
+   git clone ssh://aur@aur.archlinux.org/$1
+}
+
+# getip()
+# {
+#    curl 'http://ifconfig.me/ip'
+# }
+
+# man()
+# {
+#    command man "$@" | col -b -x | vim -R -c 'set ft=man nonumber nomod nolist' -c 'map q :q<CR>' -c 'map <SPACE> <C-D>' -c 'map b <C-U>' -c 'nmap K :Man <C-R>=expand(\"<cword>\")<CR><CR>' -
+# 
+# }
+
+# vim: ft=sh

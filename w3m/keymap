@@ -1,0 +1,165 @@
+# braph's version of ~/.w3m/keymap
+
+# Ctrl  : C-, ^
+# Escape: ESC-, M-, ^[
+# Space : SPC, ' '
+# Tab   : TAB, ^i, ^I
+# Delete: DEL, ^?
+# Up    : UP, ^[[A
+# Down  : DOWN, ^[[B
+# Right : RIGHT, ^[[C
+# Left  : LEFT, ^[[D
+
+# std movement
+keymap   h  MOVE_LEFT
+keymap   j  MOVE_DOWN
+keymap   k  MOVE_UP
+keymap   l  MOVE_RIGHT
+
+keymap   UP    MOVE_UP
+keymap   DOWN  MOVE_DOWN
+keymap   RIGHT MOVE_RIGHT
+keymap   LEFT  MOVE_LEFT
+
+keymap   u  UNDO
+keymap   r  REDO
+
+keymap   w  NEXT_WORD
+keymap   b  PREV_WORD
+
+keymap   0  LINE_BEGIN
+keymap   $  LINE_END
+
+keymap   C-u   PREV_PAGE
+keymap   C-d   NEXT_PAGE
+
+keymap   J  NEXT_PAGE
+keymap   K  PREV_PAGE
+
+#keymap   :  COMMAND
+keymap   :  GOTO_LINE
+
+#keymap	C-u	PREV_LINK
+
+keymap   g  BEGIN
+keymap   G  END
+keymap	z	CENTER_V
+
+keymap   n  SEARCH_NEXT
+keymap   N  SEARCH_PREV
+keymap   /  SEARCH
+keymap   ?  SEARCH_BACK
+
+keymap   C-l   REDRAW
+keymap   C-g   LINE_INFO
+
+#keymap   Q  EXIT
+keymap	C-h   HELP
+keymap   Q  QUIT
+#
+
+# browser stuff
+keymap   O  LOAD
+keymap   o  GOTO
+keymap   C-r  RELOAD
+keymap   R  PEEK
+
+keymap   t     TAB_LINK
+keymap   C-t   PEEK_LINK
+keymap   T     NEW_TAB
+
+keymap   }  NEXT_TAB
+keymap   {  PREV_TAB
+keymap   x  CLOSE_TAB
+
+keymap   B  BACK
+keymap	d	SAVE_LINK
+
+keymap	<	SHIFT_LEFT
+keymap	>	SHIFT_RIGHT
+
+keymap	ESC-o OPTIONS
+keymap   ESC-s SAVE_SCREEN
+
+keymap   i  VIEW_IMAGE
+keymap   I  PEEK_IMG
+keymap	L	LIST
+keymap	H  HISTORY
+
+keymap   f  LIST_MENU
+#
+
+keymap	M	EXTERN
+keymap	M-M	EXTERN_LINK
+
+keymap	TAB	NEXT_LINK
+
+#keymap	C-@	MARK
+
+keymap	C-j	GOTO_LINK
+keymap	C-k	COOKIE
+keymap	C-m	GOTO_LINK
+keymap	C-n	MOVE_DOWN
+keymap	C-p	MOVE_UP
+keymap	C-r	ISEARCH_BACK
+keymap	C-s	ISEARCH
+keymap	C-w	WRAP_TOGGLE
+keymap	C-z	SUSPEND
+
+#keymap	!	SHELL
+#keymap	#	PIPE_SHELL
+#keymap	@	READ_SHELL
+
+keymap	SPC	NEXT_PAGE
+keymap	\"	REG_MARK
+keymap	+	NEXT_PAGE
+keymap	,	LEFT
+keymap	-	PREV_PAGE
+keymap	.	RIGHT
+#keymap	:	MARK_URL
+keymap	";"	MARK_WORD
+keymap	=	INFO
+keymap	D	DOWNLOAD_LIST
+keymap	E	EDIT
+keymap	F	FRAME
+keymap	Z	CENTER_H
+keymap	[	LINK_BEGIN
+keymap	]	LINK_END
+keymap	\^	LINE_BEGIN
+keymap	m	MOUSE_TOGGLE
+keymap	s	SELECT_MENU
+keymap	v	VIEW
+keymap	|	PIPE_BUF
+
+keymap	M-TAB	PREV_LINK
+keymap	M-C-j	SAVE_LINK
+keymap	M-C-m	SAVE_LINK
+
+keymap	M-:	MARK_MID
+keymap	M-I	SAVE_IMAGE
+keymap	M-W	DICT_WORD_AT
+keymap	M-a	ADD_BOOKMARK
+keymap	M-b	BOOKMARK
+keymap	M-e	EDIT_SCREEN
+keymap	M-k	DEFINE_KEY
+keymap	M-m	MOVE_LIST_MENU
+keymap	M-n	NEXT_MARK
+#keymap	M-o	SET_OPTION
+keymap	M-p	PREV_MARK
+keymap	M-s	SAVE
+keymap	M-t	TAB_MENU
+keymap	M-u	GOTO_RELATIVE
+keymap	M-v	PREV_PAGE
+keymap	M-w	DICT_WORD
+
+keymap	M-[E	MENU
+keymap	M-[L	MENU
+keymap	M-[Z	PREV_LINK
+
+keymap	M-[1~	BEGIN
+keymap	M-[2~	MENU
+keymap	M-[4~	END
+keymap	M-[5~	PREV_PAGE
+keymap	M-[6~	NEXT_PAGE
+keymap	M-[28~	MENU
+

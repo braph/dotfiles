@@ -1,0 +1,58 @@
+#> if testfile(f, "PRIVATE_DIR/mutt/login")
+#>    include "PRIVATE_DIR/mutt/login"
+#> endif
+
+### Displaying Mails
+# We're using directories, not files
+set mbox_type=Maildir
+
+# Our "root". "+" or "=" will be expanded to this value
+set folder=~/Mail
+
+# Our "spoolfile" is our Maildir
+set spoolfile=+/
+
+# "mbox" is our "read mails" folder
+set mbox=+cur
+
+# FILE for sent mails
+set record=+sent
+
+# FILE for drafts
+set postponed=+drafts
+
+## Sending Mails
+set sendmail="/usr/bin/msmtp"
+
+### Theme
+color status white blue
+color indicator blue white
+color normal default default
+
+color header yellow default "^From:"
+color header red default "^(Subject|X-Spam-Score|Authentication-Results):"
+color header yellow default "^Date:"
+color header cyan default "^To:"
+color header cyan default "^Cc:"
+color body   brightyellow default "(http|https|ftp)://[^ ]+"
+
+color error brightred default
+
+### Other Options
+# makes mutt a bit faster
+set header_cache=~/.mutt/HEADER_CACHE
+set charset="utf-8"
+
+### Composing Mails
+set editor="vim"
+set edit_headers=yes
+set use_from=yes
+
+### Keybindings
+bind index G last-entry
+bind index g first-entry
+
+### Personal Data
+set realname="REALNAME"
+set signature=~/.mutt/signature
+set from="REALNAME <EMAIL>"

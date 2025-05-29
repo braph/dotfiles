@@ -1,0 +1,30 @@
+#!/bin/bash
+
+NEW_TAB_KEY="T";
+GOTO_KEY="U"; # default keys
+
+W3M_CONF="$HOME/.w3m"
+
+URL=${1:?"Missing argument"}
+
+if tmux findw -N w3m; then
+
+   # read keys from w3m-config
+   if [[ -e "$W3M_CONF/config" ]]; then
+      KEYMAP=$(grep "^keymap" "$W3M_CONF/config")
+
+      if [[ -n "$KEYMAP" ]] && [[ -f "$W3M_CONF/$KEYMAP" ]]; then
+         KEYMAP=$(sed 's/keymap[ \t]*//' <<< "$KEYMAP")
+
+         grep -E "^keymap.*(NEW_TAB|GOTO)" "$W3M_CONF/$KEYMAP" | while read keymap binding action _trash; do
+            declare ${action}_KEY=$binding
+         done
+      fi
+   fi
+
+   tmux send-keys ^c; # leave input-mode (or other modes as well)
+   tmux send-keys -R "$NEW_TAB_KEY$GOTO_KEY$URL";
+   tmux send-keys Enter;
+else
+   tmux neww "w3m '$URL'"
+fi

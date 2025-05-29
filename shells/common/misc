@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Limit number of processes ####################################################
+#> if "OPERATING_SYSTEM" !~ /Cygwin|Darwin/
+ulimit -u 8000
+#> endif
+
+# Disable history expansion ####################################################
+#  "set +o histexpand" does not work, we use +H instead
+set +H
+
+# Redraw within TMUX: ##########################################################
+# TODO: write "which" command for filepp!
+if which resize 2>/dev/null >/dev/null; then
+   trap 'eval $(resize)' WINCH
+fi
+
+# Disable ^S/^Q ################################################################
+stty start '' stop ''
+
+# Openarena Servers / :F StupidCTF (by Failgun) ################################
+CTF="45.76.94.34:27960"
+INSTA="45.76.94.34:27963"
+GENIUS="45.76.94.34:20003"
+
+# vim: ft=sh

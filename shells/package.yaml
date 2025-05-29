@@ -1,0 +1,82 @@
+defines:
+
+  LANGUAGE:     "en_US.UTF-8"
+  SLOW_SYSTEM:  "0"
+  PROMPT_STYLE: "MOSTLY_RIGHT"
+  USE_FORTUNE:  "0"
+
+  COLORIZE_COPE: "1"
+  COLORIZE_GRC:  "1"
+  COLORIZE_CW:   "1"
+
+  REMOVE_WHITESPACE_LINES: "1" # filepp module "remove-empty-lines.pm" param
+
+  TMUX_VERSION: |
+    SHELL:
+      if type tmux &>/dev/null 2>/dev/null; then
+        tmux -V | sed 's/tmux //'
+      else
+        echo 0.0
+      fi
+
+  GEMPATH: |
+    SHELL:
+      if type gem &>/dev/null; then
+        gem env gempath
+      fi
+
+  PRESERVE_ROOT: |
+    SHELL:
+      if rm --help 2>&1 | grep -q -- --preserve-root; then
+        echo --preserve-root
+      fi
+
+  ONE_FILE_SYSTEM: |
+    SHELL:
+      if rm --help 2>&1 | grep -q -- --one-file-system; then
+        echo --one-file-system
+      fi
+
+  LS_COLOR: |
+    SHELL:
+      if ls --help 2>&1 | grep -q -- --color; then
+        echo --color=auto;
+      else
+        echo -G
+      fi
+
+  HAVE_NVIM: |
+    SHELL:
+       type nvim &>/dev/null && echo 1 || echo 0
+
+  HAVE_MAN_PROMPT: |
+    SHELL:
+      if man --help 2>&1 | grep -q -- --prompt; then
+        echo 1
+      else
+        echo 0
+      fi
+
+pre_build: |
+  # TODO use PACKAGE_TEMP_DIR
+
+  if type conpalette &>/dev/null; then
+    conpalette --shell --oneline blah-light > "$TEMP_DIR/vt_palette"
+  else
+    if ! [ -d "$TEMP_DIR/conpalette" ]; then
+      git clone "https://github.com/braph/conpalette" "$TEMP_DIR/conpalette" || true
+    fi
+
+    "$TEMP_DIR/conpalette/bin/conpalette" --shell --oneline blah-light > "$TEMP_DIR/vt_palette";
+  fi
+
+  ./zsh/tools/zsh_trim_setopts.sh zsh/zshoptions "$TEMP_DIR/zshoptions"
+  #./zsh/tools/zsh_trim_aliases.sh
+
+pp_files:
+  ".bashrc": "bash/bashrc"
+  ".zshrc":  "zsh/zshrc"
+
+filepp_modules: ["hash-comment.pm", "remove-empty-lines.pm"]
+
+filepp_include_dirs: ["$TEMP_DIR", "common"] # TODO: describe why TEMP_DIR

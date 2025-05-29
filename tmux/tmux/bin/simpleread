@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Term::ReadLine;
+
+my $histfile = "/dev/null";
+my $prompt = "";
+
+GetOptions(
+   "history|h=s" => \$histfile,
+   "prompt|p=s" => \$prompt
+) or die "Error on commandline\n";
+
+my $term = Term::ReadLine->new("simple read line");
+
+if (open(my $in, "<", $histfile))
+{
+   while (<$in>)
+   {
+      chomp;
+      $term->addhistory($_);
+   }
+}
+
+$_ = $term->readline($prompt);
+
+if (m/\S/)
+{
+   if (open(my $out, ">>", $histfile))
+   {
+      print $out "$_\n";
+   }
+
+   print "$_\n";
+   exit 0;
+}
+
+exit 1;

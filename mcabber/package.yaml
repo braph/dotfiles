@@ -1,0 +1,16 @@
+defines:
+  THEME_COLOR:  "blue"
+  NICK:         "Kartoffel"
+  JID:          "INSERT_JID_HERE"
+  PASSWORD:     "INSERT_PW_HERE"
+  JOIN_ROOMS:   ""
+  PORT:         "5222"
+  HOST:         ""
+
+filepp_modules: ['maths.pm', 'testfile.pm', 'foreach.pm']
+
+ignore_files:   ['extractDefaultKeymap.sh', 'mcabber/keymap', 'mcabber/theme']
+
+post_install:
+  mkdir -p "$DEST_DIR/.mcabber/history"
+  mkdir -p "$DEST_DIR/.mcabber/otr"

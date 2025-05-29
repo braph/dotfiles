@@ -1,0 +1,11 @@
+/*
+  * {background-color: green !important; color:red !important}
+  :link {color: orange !important}
+  :visited {color: brown !important}
+
+*/
+
+* { display: normal !important }
+
+/* krautchan.net hack */
+.spoiler { color: gray !important }

@@ -1,0 +1,12 @@
+defines:
+  COLOR_THEME: "tango"
+  FONTSIZE:    "12"
+
+filepp_modules: ["foreach.pm"]
+
+filepp_include_dirs: ["themes"]
+
+ignore_files: ["themes"]
+
+apply: |
+  xrdb ~/.Xresources || true

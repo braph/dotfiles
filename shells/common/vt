@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Set $TTY is not available yet
+[[ "$TTY" ]] || TTY=`tty`
+
+# If we're on a tty ...
+if [[ "${TTY/*tty*/IS_TTY/}" == IS_TTY ]]; then
+
+# ( {} & )
+# Run command in background and supress "[<JOB>] $PID ... [<JOB>]+ Done" output
+### ({
+###    if tty | grep -qF 'tty'; then
+###       if [ "$TERM" = "linux" ]; then
+###           #> include <vt_palette>
+###           clear #for background artifacting
+###       fi
+### 
+###       setfont Lat2-Terminus16.psfu.gz &>/dev/null
+###    fi
+### }&)
+
+# Change font ##################################################################
+setfont Lat2-Terminus16.psfu.gz &>/dev/null
+#setfont LatGrkCyr-12x22.psfu.gz &>/dev/null
+
+# Disable beep #################################################################
+setterm -blength 0
+
+# Clear artifacts #############################################################
+clear
+
+# These changed require sudo ##################################################
+vtsetup() {
+  sudo kbdrate -r 30 # Faster keyboard
+  sudo loadkeys ./chkeys.map << EOF
+    keycode 71 = Scroll_Backward
+    keycode 75 = Scroll_Forward
+EOF
+}
+
+echo "Type 'vtsetup' for setting up terminal"
+
+fi
+# vim: ft=sh

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+declare -a FIRST=(dillo);
+declare -a SECOND=(firefox);
+declare -a THIRD=(firefox);
+
+declare -a SELECTED_BROWSER;
+
+case "$1" in
+   2) SELECTED_BROWSER=( "${SECOND[@]}" ); shift;;
+   3) SELECTED_BROWSER=( "${THIRD[@]}" ); shift;;
+   *) SELECTED_BROWSER=( "${FIRST[@]}" );;
+esac
+
+"${SELECTED_BROWSER[@]}" "$@" >/dev/null 2>/dev/null &

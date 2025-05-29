@@ -1,0 +1,93 @@
+# Comments start with a # sign, do not use them mid-line.
+# Each line must be blank, a comment, or a key definition.
+#
+# key definition: <action name> <key1> [<key2> [<key3>]]
+#
+# Each <key> is an X11 keysym (as output by xev) with optional modifier.
+# For instance, C-x would be Ctrl+X, or 4-space Mod4+Space
+
+toggle_actions a
+toggle_aliasing A
+
+toggle_caption c
+toggle_filenames d
+
+toggle_exif e
+
+save_filelist
+
+toggle_pause p
+toggle_info i
+
+toggle_keep_vp
+toggle_menu m
+
+next_img j
+prev_img k
+jump_random question
+
+toggle_pointer
+
+quit Q
+
+reload_image r
+
+save_image C-s
+
+toggle_fullscreen f
+
+size_to_image w
+
+close q
+
+orient_1 greater
+orient_3 less
+flip underscore
+mirror bar
+
+action_0 Return
+action_1 1
+action_2 2
+action_3 3
+action_4 4
+action_5 5
+action_6 6
+action_7 7
+action_8 8
+action_9 9
+
+jump_first g
+jump_last G
+
+jump_fwd C-d
+jump_back C-u
+
+# are you crazy????
+remove
+delete C-S-Delete
+
+scroll_left H
+scroll_down J
+scroll_up K
+scroll_right L
+
+scroll_left_page C-h
+scroll_down_page C-j
+scroll_up_page C-k
+scroll_right_page C-l
+
+render R
+
+zoom_in plus
+zoom_out minus
+
+zoom_default 0
+zoom_fit F
+
+# Menu Bindings
+menu_parent    h Left
+menu_child     l Right
+menu_down      j Down
+menu_up        k Up
+menu_select    space Return
+menu_close     Escape

@@ -1,0 +1,4 @@
+defines:
+  THEME_COLOR: "blue"
+
+prefix_dir: ".abook"

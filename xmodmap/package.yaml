@@ -1,0 +1,12 @@
+defines:
+  KEYBOARD_BASE_LAYOUT: "us"
+  REMAP_NUMPAD:         "1"
+  GERMANIZE:            "1"
+
+pp_files: ["Xmodmap"]
+
+filepp_prefix: "!>"
+
+apply:
+  setxkbmap $KEYBOARD_BASE_LAYOUT
+  xmodmap ~/.Xmodmap

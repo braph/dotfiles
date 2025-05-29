@@ -1,0 +1,94 @@
+# Colorshemes for MOC by Benjamin Abendroth
+
+# ELEMENT = FOREGROUND_COLOR BACKGROUND_COLOR [ATTRIBUTE]
+
+# Colors
+# red, blue, red, green: yellow, black, white, default[transparent], magenta, cyan, grey
+
+# ATTRIBUTE parameters
+# normal      - default (no highlight)
+# standout    - best highlighting mode of the terminal
+# underline   - underlining
+# reverse     - reverse video
+# blink       - blinking
+# dim         - half bright
+# bold        - extra bright or bold
+# protect     - protected mode
+
+# ELEMENT is an element of MOC interface. This can be:
+# background         - default background for regions when nothing is displayed
+# frame              - frames for windows
+# window_title       - the title of the window (eg name of the current
+#                      directory)
+# directory          - a directory in the menu
+# selected_directory - a directory that is selected using arrows
+# playlist           - playlist file
+# selected_playlist  - see selected directory
+# file               - an ordinary file in the menu (mp3, ogg, ...)
+# selected_file      - see selected directory
+# marked_file        - a file that is currently beeing played
+# marked_selected_file - a file that is currently beeing played and is also
+#                      selected using arrows
+# info               - information shown at the right side of files
+# selected_info      - see selected directory
+# marked_info        - a file (its time) that is currently beeing played
+# marked_selected_info - a file (its time) that is currently beeing played
+#                      and is also selected using arrows
+# status             - the status line with a message
+# title              - the title of the file that is currently beeing played
+# state              - the state: play, stop, or paus (>, [], ||)
+# current_time       - current time of playing
+# time_left          - the time left to the end of playing the current file
+# total_time         - the length of the currently played file
+# time_total_frames  - the brackets outside the total time of a file ([10:13])
+# sound_parameters   - the frequency and bitrate numbers
+# legend             - "KHz" and "Kbps"
+# disabled           - disabled element ([STEREO])
+# enabled            - enabled element
+# empty_mixer_bar    - "empty" part of the volume bar
+# filled_mixer_bar   - "filled" part of the volume bar
+# empty_time_bar     - "empty" part of the time bar
+# filled_time_bar    - "filled" part of the time bar
+# entry              - place wher user can type a search query or a file name
+# entry_title        - the title of an entry
+# error              - error message
+# message            - information message
+# plist_time         - total time of displayed items
+
+
+background		= default		default
+frame			= default		default
+window_title		= default		default
+directory		= default		default
+selected_directory	= default		default
+playlist		= default		default
+selected_playlist	= default		default
+file			= default		default
+selected_file		= default		default
+marked_file		= default		default
+marked_selected_file	= default		default
+info			= default		default
+selected_info		= default		default
+marked_info		= default		default
+marked_selected_info	= default		default
+status			= default		default
+title			= default		default
+state			= default		default
+current_time		= default		default
+time_left		= default		default
+total_time		= default		default
+time_total_frames	= default		default
+sound_parameters	= default		default
+legend			= default		default
+disabled		= default		default
+enabled			= default		default
+empty_mixer_bar		= default		default
+filled_mixer_bar	= default		default
+empty_time_bar		= default		default
+filled_time_bar		= default		default
+entry			= default		default
+entry_title		= default		default
+error			= default		default
+message			= default		default
+plist_time		= default		default
+

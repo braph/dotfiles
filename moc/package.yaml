@@ -1,0 +1,5 @@
+defines:
+  THEME_COLOR: "blue"
+  USE_THEME:   "frame"
+
+prefix_dir: ".moc"

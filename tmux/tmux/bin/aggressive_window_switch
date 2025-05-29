@@ -1,0 +1,51 @@
+#!/bin/bash
+
+SESSIONS=$(tmux list-sessions -F '#S')
+
+(( $(wc -l <<< "$SESSIONS") == 1 )) && exit 0
+
+IFS=, read SOCKET WHATEVER CUR_SESSION <<< "$TMUX";
+
+declare -a fixedWins=(
+   $(tmux list-windows -t "$CUR_SESSION" -F '#I#F' | grep -- '-$' | tr -d '-')
+);
+
+while read -r SESSION; do
+   if [[ "$SESSION" != "$CUR_SESSION" ]]: then
+      WINDOWS=$(tmux list-windows -t "$SESSION" -F '#I#F');
+
+      CUR=$(grep -- '-$' <<< "$WINDOWS" | tr -d '-');
+
+      NEED_CHANGE=0
+      for fixedWin in "${fixedWins[@]}"; do
+         [[ "$fixedWin" == "$CUR" ]] && NEED_CHANGE=1 && break;
+      done
+
+      if (( NEED_CHANGE )); then
+         LAST=$(grep -- '*$' <<< "$WINDOWS" | tr -d '*');
+
+         CAN_USE_LAST=1
+         for fixedWin in "${fixedWins[@]}"; do
+            [[ "$fixedWin" == "$LAST" ]] && CAN_USE_LAST=0 && break;
+         done
+
+         if (( CAN_USE_LAST )); then
+            tmux select-window -t "$SESSION:$LAST";
+            fixedWins+=( "$LAST" );
+         else
+            # find unused window. if no window is available (empty lines in grep) exit
+            for fixedWin in "${fixedWins[@]}"; do
+               WINDOWS=$(grep -v "$fixedWin" <<< "$WINDOWS") || exit 0;
+            done
+
+            NEW=$(head -1 <<< "$WINDOWS");
+            tmux select-window -t "$SESSION:$NEW";
+            fixedWins+=( "$NEW" );
+         fi
+      else
+         fixedWins+=( "$ACT" );
+      fi
+   fi
+done <<< "$SESSIONS"
+
+exit 0

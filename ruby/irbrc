@@ -1,0 +1,26 @@
+IRB.conf[:SAVE_HISTORY] = 999999
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
+
+IRB.conf[:PROMPT][:CUSTOM] = {
+  :PROMPT_I => ">> ",
+  :PROMPT_S => "%l>> ",
+  :PROMPT_C => ".. ",
+  :PROMPT_N => ".. ",
+  :RETURN => "=> %s\n"
+}
+IRB.conf[:PROMPT_MODE] = :CUSTOM
+IRB.conf[:AUTO_INDENT] = true
+
+require 'rubygems'
+require 'irb/completion'
+
+if require 'wirble'
+   Wirble.init
+   Wirble.colorize
+end
+
+#require 'bond'
+#Bond.start
+
+require 'benchmark'
+include Benchmark

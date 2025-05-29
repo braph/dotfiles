@@ -1,0 +1,181 @@
+#!/bin/bash
+
+#> define COLOR_ARRAY_TYPE macro
+#
+# macro:   array "exported" as macro
+# array:   array exported as associative shell array
+
+#> if "COLOR_ARRAY_TYPE" eq "macro"
+   #> define ${color[bg-black]} 40
+   #> define ${color[bg-blue]} 44
+   #> define ${color[bg-cyan]} 46
+   #> define ${color[bg-default]} 49
+   #> define ${color[bg-green]} 42
+   #> define ${color[bg-grey]} 40
+   #> define ${color[bg-magenta]} 45
+   #> define ${color[bg-red]} 41
+   #> define ${color[bg-white]} 47
+   #> define ${color[bg-yellow]} 43
+   #> define ${color[black]} 30
+   #> define ${color[blink]} 05
+   #> define ${color[blue]} 34
+   #> define ${color[bold]} 01
+   #> define ${color[conceal]} 08
+   #> define ${color[cyan]} 36
+   #> define ${color[default]} 39
+   #> define ${color[faint]} 02
+   #> define ${color[fg-black]} 30
+   #> define ${color[fg-blue]} 34
+   #> define ${color[fg-cyan]} 36
+   #> define ${color[fg-default]} 39
+   #> define ${color[fg-green]} 32
+   #> define ${color[fg-grey]} 30
+   #> define ${color[fg-magenta]} 35
+   #> define ${color[fg-red]} 31
+   #> define ${color[fg-white]} 37
+   #> define ${color[fg-yellow]} 33
+   #> define ${color[green]} 32
+   #> define ${color[grey]} 30
+   #> define ${color[magenta]} 35
+   #> define ${color[no-blink]} 25
+   #> define ${color[no-conceal]} 28
+   #> define ${color[no-reverse]} 27
+   #> define ${color[no-standout]} 23
+   #> define ${color[no-underline]} 24
+   #> define ${color[none]} 00
+   #> define ${color[normal]} 22
+   #> define ${color[red]} 31
+   #> define ${color[reverse]} 07
+   #> define ${color[standout]} 03
+   #> define ${color[underline]} 04
+   #> define ${color[white]} 37
+   #> define ${color[yellow]} 33
+#> elif "COLOR_ARRAY_TYPE" eq "array"
+   #> if "SHELL_NAME" eq "zsh"
+      autoload -U colors && colors;
+   #> else
+      declare -A color=(
+         [bg-black]=40
+         [bg-blue]=44
+         [bg-cyan]=46
+         [bg-default]=49
+         [bg-green]=42
+         [bg-grey]=40
+         [bg-magenta]=45
+         [bg-red]=41
+         [bg-white]=47
+         [bg-yellow]=43
+
+         [black]=30
+         [grey]=30
+         [red]=31
+         [green]=32
+         [yellow]=33
+         [blue]=34
+         [magenta]=35
+         [cyan]=36
+         [white]=37
+         [default]=39
+
+         [fg-black]=30
+         [fg-blue]=34
+         [fg-cyan]=36
+         [fg-default]=39
+         [fg-green]=32
+         [fg-grey]=30
+         [fg-magenta]=35
+         [fg-red]=31
+         [fg-white]=37
+         [fg-yellow]=33
+
+         [no-blink]=25
+         [no-conceal]=28
+         [no-reverse]=27
+         [no-standout]=23
+         [no-underline]=24
+
+         [blink]=05
+         [bold]=01
+         [conceal]=08
+         [faint]=02
+         [none]=00
+         [normal]=22
+         [reverse]=07
+         [standout]=03
+         [underline]=04
+      )
+   #> endif
+#>else
+   #> error "COLOR_ARRAY_TYPE: wrong value"
+#>endif
+
+#> ifdef TPUT_COLORS
+   COLOR_BLACK=`tput setaf 0`
+   COLOR_RED=`tput setaf 1`
+   COLOR_GREEN=`tput setaf 2`
+   COLOR_YELLOW=`tput setaf 3`
+   COLOR_BLUE=`tput setaf 4`
+   COLOR_MAGENTA=`tput setaf 5`
+   COLOR_CYAN=`tput setaf 6`
+   COLOR_WHITE=`tput setaf 7`
+
+   COLOR_BG_BLACK=`tput setab 0`
+   COLOR_BG_RED=`tput setab 1`
+   COLOR_BG_GREEN=`tput setab 2`
+   COLOR_BG_YELLOW=`tput setab 3`
+   COLOR_BG_BLUE=`tput setab 4`
+   COLOR_BG_MAGENTA=`tput setab 5`
+   COLOR_BG_CYAN=`tput setab 6`
+   COLOR_BG_WHITE=`tput setab 7`
+
+   COLOR_BOLD=`tput bold`
+   COLOR_NONE=`tput sgr0`
+#> elif 1 == 1
+   #> define COLOR(_C_) $'\033'"[${color[_C_]}m"
+
+   #> define $COLOR_BLACK       COLOR(black)
+   #> define $COLOR_RED         COLOR(red)
+   #> define $COLOR_GREEN       COLOR(green)
+   #> define $COLOR_YELLOW      COLOR(yellow)
+   #> define $COLOR_BLUE        COLOR(blue)
+   #> define $COLOR_MAGENTA     COLOR(magenta)
+   #> define $COLOR_CYAN        COLOR(cyan)
+   #> define $COLOR_WHITE       COLOR(white)
+
+   #> define $COLOR_BG_BLACK    COLOR(bg-black)
+   #> define $COLOR_BG_RED      COLOR(bg-red)
+   #> define $COLOR_BG_GREEN    COLOR(bg-green)
+   #> define $COLOR_BG_YELLOW   COLOR(bg-yellow)
+   #> define $COLOR_BG_BLUE     COLOR(bg-blue)
+   #> define $COLOR_BG_MAGENTA  COLOR(bg-magenta)
+   #> define $COLOR_BG_CYAN     COLOR(bg-cyan)
+   #> define $COLOR_BG_WHITE    COLOR(bg-white)
+
+   #> define $COLOR_BOLD        COLOR(bold)
+   #> define $COLOR_NONE        COLOR(none)
+
+#> else
+   #> define COLOR(_C_) $'\033'"[${color[_C_]}m"
+   COLOR_BLACK=COLOR(black)
+   COLOR_RED=COLOR(red)
+   COLOR_GREEN=COLOR(green)
+   COLOR_YELLOW=COLOR(yellow)
+   COLOR_BLUE=COLOR(blue)
+   COLOR_MAGENTA=COLOR(magenta)
+   COLOR_CYAN=COLOR(cyan)
+   COLOR_WHITE=COLOR(white)
+
+   COLOR_BG_BLACK=COLOR(bg-black)
+   COLOR_BG_RED=COLOR(bg-red)
+   COLOR_BG_GREEN=COLOR(bg-green)
+   COLOR_BG_YELLOW=COLOR(bg-yellow)
+   COLOR_BG_BLUE=COLOR(bg-blue)
+   COLOR_BG_MAGENTA=COLOR(bg-magenta)
+   COLOR_BG_CYAN=COLOR(bg-cyan)
+   COLOR_BG_WHITE=COLOR(bg-white)
+
+   COLOR_BOLD=COLOR(bold)
+   COLOR_NONE=COLOR(none)
+#> endif
+
+# vim: ft=sh

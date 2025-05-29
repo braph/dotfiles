@@ -1,0 +1,20 @@
+#> define BRIGHT(c) bright ## c
+
+# Mcabber color-theme
+set color_general       = white
+set color_background    = default
+set color_info          = green
+set color_msgin         = white
+set color_msgout        = THEME_COLOR
+set color_msghl         = brightred
+set color_status        = white
+set color_bgstatus      = THEME_COLOR
+set color_roster        = THEME_COLOR
+set color_rostersel     = white
+set color_bgrostersel   = THEME_COLOR
+set color_rosterselmsg  = brightwhite
+set color_rosternewmsg  = BRIGHT(THEME_COLOR)
+set color_log           = white
+
+set color_timestamp     = white
+set color_readmark      = red

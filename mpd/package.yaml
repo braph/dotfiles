@@ -1,0 +1,4 @@
+defines:
+  MUSIC_BASE: "/media/main/music"
+
+prefix_dir: ".config/mpd"

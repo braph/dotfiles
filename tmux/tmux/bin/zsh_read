@@ -1,0 +1,81 @@
+#!/bin/zsh --login
+
+#HISTFILE=/dev/null
+PROMPT=""
+SHELL_EXEC=0
+BACKGROUND=0
+COMMAND=''
+
+while getopts ":H:p:P:sbc:" opt; do
+   case $opt in
+      H) HISTFILE=$OPTARG
+      ;;
+
+      c) COMMAND=$OPTARG
+      ;;
+
+      p) PROMPT=$OPTARG
+      ;;
+
+      P) PROMPT="$OPTARG: "
+         HISTFILE="$HOME/.tmux/${OPTARG}_history"
+      ;;
+
+      s) SHELL_EXEC=1
+         BACKGROUND=0
+      ;;
+
+      b) BACKGROUND=1
+         SHELL_EXEC=0
+      ;;
+
+     \?) echo "Invalid option: -$OPTARG" >&2
+         exit 1;
+      ;;
+   esac
+done
+
+HISTSIZE=1000
+SAVEHIST=1000
+
+fc -R #"$HISTFILE"
+
+autoload -U compinit
+compinit -C
+zstyle ':completion:*' menu select
+
+zmodload zsh/parameter
+autoload +X _complete
+functions[_original_complete]=$functions[_complete]
+_complete () {
+   unset 'compstate[vared]'
+   _original_complete "$@"
+}
+
+[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" up-line-or-history
+[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" down-line-or-history
+[[ -n "${terminfo[kcub1]}" ]] && bindkey "${terminfo[kcub1]}" backward-char
+[[ -n "${terminfo[kcuf1]}" ]] && bindkey "${terminfo[kcuf1]}" forward-char
+[[ -n "${terminfo[kpp]}"   ]] && bindkey "${terminfo[kpp]}"   history-beginning-search-backward
+[[ -n "${terminfo[knp]}"   ]] && bindkey "${terminfo[knp]}"   history-beginning-search-forward
+
+REPLY=""
+vared -p "$PROMPT" REPLY
+
+if [[ -n "$REPLY" ]] ; then
+   echo "$REPLY" >> "$HISTFILE"
+
+   if [[ -n "$COMMAND" ]]; then
+      REPLY="$COMMAND $REPLY"
+   fi
+
+   if (( SHELL_EXEC )); then
+      eval exec "$REPLY"
+   elif (( BACKGROUND )); then
+      eval "$REPLY"&
+   else
+      echo "$REPLY"
+   fi
+else
+   exit 1
+fi

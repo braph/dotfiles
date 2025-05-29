@@ -1,0 +1,59 @@
+defines:
+  SLOW_SYSTEM: "0"
+
+filepp_prefix: '">'
+
+pp_files:
+  # vim
+  ".vimrc":   "vimrc.pp.vim"
+
+  # nvim
+  ".config/nvim/init.vim": "nvim.pp.vim"
+
+files:
+  # vim
+  ".vim/skeltons/bash.skel":              "skeltons/bash.skel"
+  ".vim/skeltons/main.cpp.skel":          "skeltons/main.cpp.skel"
+  ".vim/skeltons/main.c.skel":            "skeltons/main.c.skel"
+  ".vim/skeltons/perl.skel":              "skeltons/perl.skel"
+  ".vim/skeltons/php.skel":               "skeltons/php.skel"
+  ".vim/syntax/cpp.vim":                  "syntax/cpp.vim"
+  ".vim/syntax/pacmanlog.vim":            "syntax/pacmanlog.vim"
+  ".vim/syntax/tmux.vim":                 "syntax/tmux.vim"
+
+  # nvim
+  ".config/nvim/skeltons/bash.skel":      "skeltons/bash.skel"
+  ".config/nvim/skeltons/main.cpp.skel":  "skeltons/main.cpp.skel"
+  ".config/nvim/skeltons/main.c.skel":    "skeltons/main.c.skel"
+  ".config/nvim/skeltons/perl.skel":      "skeltons/perl.skel"
+  ".config/nvim/skeltons/php.skel":       "skeltons/php.skel"
+  ".config/nvim/syntax/cpp.vim":          "syntax/cpp.vim"
+  ".config/nvim/syntax/pacmanlog.vim":    "syntax/pacmanlog.vim"
+  ".config/nvim/syntax/tmux.vim":         "syntax/tmux.vim"
+
+post_install: |
+  # vim
+  mkdir -p "$DEST_DIR/.vim/view"
+  mkdir -p "$DEST_DIR/.vim/bundle"
+
+  pushd "$DEST_DIR/.vim/bundle" && {
+    git clone https://github.com/VundleVim/Vundle.vim || true
+    popd
+  } || true
+
+  # nvim
+  mkdir -p "$DEST_DIR/.config/nvim/view"
+  mkdir -p "$DEST_DIR/.config/nvim/bundle"
+
+  pushd "$DEST_DIR/.config/nvim/bundle" && {
+    git clone https://github.com/VundleVim/Vundle.vim || true
+    popd
+  } || true
+
+apply: |
+  # vim
+  vim  +PluginInstall +quitall || true
+
+  # nvim
+  nvim +PluginInstall +quitall || true
+

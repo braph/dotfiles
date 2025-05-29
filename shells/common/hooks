@@ -1,0 +1,90 @@
+#!/bin/bash
+
+set_title() {
+#> if "SHELL_NAME" eq "zsh"
+   print -Pn "\e]0;$TITLE_PROMPT $1\a"
+#> else
+   echo -en "\033]2;$1\007"
+#> endif
+}
+
+
+# === chpwd() hook =============================================================
+chpwd() {
+   ls LS_COLOR
+}
+# ==============================================================================
+
+# === emulate chpwd() on BASH ==================================================
+#> if "SHELL_NAME" eq "bash"
+cd() {
+   builtin CD_COMMAND "${@:-$HOME}" || return;
+   chpwd
+}
+#> endif
+# ==============================================================================
+
+# === preexec() hook ===========================================================
+preexec() {
+   LAST_COMMAND="$1"
+
+	case $TERM in
+		xterm*)
+         set_title "$1"
+      ;;
+	
+		screen*)
+         set_title "$1"
+         #screen -S "$SCREEN_SESSION" -X title "$(print -Pn "$TITLE_PROMPT $1")"
+			#screen -S "$SCREEN_SESSION" -X caption string "$(print -Pn "$TITLE_PROMPT $1")"
+      ;;
+	esac
+}
+
+#> if "SHELL_NAME" eq "bash"
+#preexec_bash_trap()
+#{
+#   [[ -n "$COMP_LINE" ]] && return # do nothing if completing
+#   [[ "$BASH_COMMAND" = "$PROMPT_COMMAND" ]] && return # don't cause a preexec for $PROMPT_COMMAND
+#   local this_command=`HISTTIMEFORMAT= history 1 | sed -e 's/^[ ]*[0-9]*[ ]*//'`;
+#   preexec "$this_command"
+#}
+function preexec_bash_trap()
+if [[ -z "$COMP_LINE" ]] && [[ "$BASH_COMMAND" != "$PROMPT_COMMAND" ]]; then
+   local this_command=`HISTTIMEFORMAT= history 1 | sed -e 's/^[ ]*[0-9]*[ ]*//'`;
+   preexec "$this_command"
+fi
+
+trap 'preexec_bash_trap' DEBUG
+#> endif
+# ==============================================================================
+
+
+# PERIOD=0
+# periodic()
+# {
+# }
+
+precmd() {
+   printf "\a";
+
+   case $TERM in
+      xterm*)
+         #print -Pn "\e]0;$TITLE_PROMPT (last command: $LAST_COMMAND)\a"
+         set_title "$TITLE_PROMPT $1 (last command: $LAST_COMMAND)"
+      ;;
+
+      screen*)
+         #print -Pn "\e]0;$TITLE_PROMPT $1 (last command: $LAST_COMMAND)\a"
+         set_title "$TITLE_PROMPT $1 (last command: $LAST_COMMAND)"
+         #screen -S "$SCREEN_SESSION" -X title "$(print -Pn "$TITLE_PROMPT")"
+         #screen -S "$SCREEN_SESSION" -X caption string "$(print -Pn "$TITLE_PROMPT")"
+      ;;
+   esac
+}
+
+# zshexit()
+# {
+# }
+
+# vim: ft=sh

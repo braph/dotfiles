@@ -1,0 +1,27 @@
+!Muzieca mono
+!black
+TERM*color0:  #000000
+TERM*color8:  #090909
+!red
+TERM*color1:  #111111
+TERM*color9:  #181818
+!green
+TERM*color2:  #222222
+TERM*color10: #272727
+!yellow
+TERM*color3:  #333333
+TERM*color11: #393939
+!blue 
+TERM*color4:  #444444
+TERM*color12: #484848
+!magenta
+TERM*color5:  #555555
+TERM*color13: #595959
+!cyan
+TERM*color6:  #666666
+TERM*color14: #707070
+!white
+TERM*color7:  #777777
+TERM*color15: #818181
+
+! vim: ai:si:et:ts=4:sw=4:ft=xdefaults:

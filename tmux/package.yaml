@@ -1,0 +1,18 @@
+defines:
+  THEME_COLOR: "blue"
+
+  DEFAULT_SHELL: |
+    SHELL:
+      type -p zsh  2>/dev/null || \
+      type -p bash 2>/dev/null || \
+      type -p sh   2>/dev/null
+
+  HAVE_DEV_SHM: |
+    SHELL:
+      test -d /dev/shm && echo 1 || echo 0
+
+filepp_modules: ["bigdef.pm", "function.pm", "hash-comment.pm", "remove-empty-lines.pm"]
+
+apply: |
+  echo "Reloading tmux conf ..." >&2
+  tmux source ~/.tmux.conf && echo DONE || echo FAILED

@@ -1,0 +1,11 @@
+# TODO: Warn if site-functions are missing!
+fpath=( /usr/share/zsh/site-functions $fpath )
+
+autoload -U compinit
+
+# don't check the completion dumpfile!
+compinit -C
+
+zstyle ':completion:*' menu select
+
+# vim: ft=zsh

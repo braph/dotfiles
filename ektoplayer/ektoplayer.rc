@@ -1,0 +1,10 @@
+#set use_cache false
+set small_update_pages 0
+set log_file /tmp/.ektolog
+
+set database_file /media/main/music/techno/ektoplazm/.ektoplazm.db
+set cache_dir /media/main/music/techno/ektoplazm/cache
+set archive_dir /media/main/music/techno/ektoplazm
+
+set browser.format_256 ' <number size="3" fg="97" /> <artist rel="25" fg="24" /> <album rel="30" fg="160" /> <title rel="33" fg="178" /> <styles rel="20" fg="37" /> <bpm size="3" fg="28" justify="right" />'
+

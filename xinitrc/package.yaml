@@ -1,0 +1,6 @@
+defines:
+  WINDOW_MANAGER: "openbox"
+  STARTPAGE:      "blog.fefe.de"
+
+post_build:
+  chmod +x "$BUILD_DIR/.xinitrc"

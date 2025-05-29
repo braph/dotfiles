@@ -1,0 +1,14 @@
+#!/bin/bash
+
+menu=$(cat - <<EOF
+zsh
+ncmpcpp
+vim
+htop
+mcabber
+EOF
+)
+
+c=$( echo "$menu" | dmenu -b -fn Hack ) 
+
+tmux new-window "$c"

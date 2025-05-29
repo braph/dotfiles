@@ -1,0 +1,9 @@
+defines:
+  SCROLL_BROWSER_LINES:       "3"
+  SCROLL_BROWSER_LINES_SHIFT: "15"
+
+apply: |
+  killall imwheel || true
+  if type imwheel &>/dev/null; then
+    imwheel &
+  fi

@@ -1,0 +1,38 @@
+#> ifndef sub
+#>  error "Macro sub() not found"
+#> endif
+
+#> function ord CORE::ord
+#> define KEY(k) ord(k)
+#> define ALT(k) M ## ord(k)
+#> define CTRL(k) sub(ord(k), 96)
+
+# Strg + Return
+bind 10 = msay toggle
+
+# Alt + Return
+bind M10 = msay toggle
+
+bind ALT(a) = msay abort
+bind ALT(i) = msay toggle
+bind ALT(e) = roster alternate
+
+bind ALT(j) = roster down
+bind ALT(k) = roster up
+bind ALT(g) = roster top
+bind ALT(G) = roster bottom
+
+bind ALT(K) = buffer up 10
+bind ALT(J) = buffer down 10
+bind CTRL(u) = buffer up
+bind CTRL(d) = buffer down
+
+bind ALT(m) = roster unread_next
+
+bind ALT(o) = roster toggle_offline
+
+bind ALT(n) = room names --compact
+bind ALT(N) = room names
+
+bind ALT(r) = roster toggle
+bind ALT(R) = connect

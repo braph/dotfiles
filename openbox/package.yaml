@@ -1,0 +1,6 @@
+prefix_dir: ".config/openbox"
+
+ignore_files: ["firefox-profiles.sh"]
+
+apply: |
+  openbox --reconfigure || true

@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Read .pythonrc when python starts in interactive mode #######################
+export PYTHONSTARTUP=~/.pythonrc
+
+# Color for Grep-Matching #####################################################
+export GREP_COLORS="ms=01;31:mc=01;31:sl=${color[blue]}:cx=:fn=35:ln=32:bn=32:se=36"
+
+# bc calculator: quite, with math lib #########################################
+export BC_ENV_ARGS="-l -q"
+
+# Color for Manpages ##########################################################
+export \
+LESS_TERMCAP_md=$COLOR_BLUE$COLOR_BOLD \
+LESS_TERMCAP_me=$COLOR_NONE \
+LESS_TERMCAP_so=$COLOR_WHITE$COLOR_BG_BLUE \
+LESS_TERMCAP_se=$COLOR_NONE \
+LESS_TERMCAP_us=$COLOR_GREEN \
+LESS_TERMCAP_ue=$COLOR_NONE 
+# see man termcap:
+#	[...]
+#       md   Start bold mode
+#       me   End all mode like so, us, mb, md and mr
+#       so   Start standout mode
+#       se   End standout mode
+#       us   Start underlining
+#       ue   End underlining
+#	[...]
+
+# We don't need a history in less #############################################
+export LESSHISTFILE=-
+
+# Default parameters for less #################################################
+export LESS='-QiMR'
+# -Q: disable bell
+# -i: case-insensetive search
+# -M: longer prompt
+
+# Set default X11 display: ####################################################
+[[ -z "$DISPLAY" ]] && export DISPLAY=:0
+
+# Set default editor ##########################################################
+#> if "HAVE_NVIM" eq "1"
+export EDITOR=nvim
+export SUDO_EDITOR=nvim
+export VISUAL=nvim
+#> else
+export EDITOR=vim
+export SUDO_EDITOR=vim
+export VISUAL=vim
+#> endif
+
+# Yaourt: build PKGBUILDS on arm devices ######################################
+#export MAKEPKG=makepkg_pre.sh
+
+# pacaur: use /tmp as builddir ################################################
+#export BUILDDIR=/tmp
+
+# android studio ##############################################################
+if [[ -e "$HOME/Android/Sdk" ]]; then
+   export ANDROID_HOME="$HOME/Android/Sdk"
+   export ANDROID_SDK_ROOT=$ANDROID_HOME
+fi
+
+# rlwrap: here are the histfiles stored #######################################
+export RLWRAP_HOME=~/.rlwrap
+
+# vim: ft=sh

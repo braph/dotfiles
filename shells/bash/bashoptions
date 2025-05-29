@@ -1,0 +1,11 @@
+#!/bin/bash
+
+HISTCONTROL=ignoreboth
+HISTSIZE=10000000
+shopt -s autocd
+shopt -s histappend
+shopt -s no_empty_cmd_completion
+
+. /usr/share/bash-completion/bash_completion
+
+# vim: ft=sh

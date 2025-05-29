@@ -1,0 +1,217 @@
+#!/bin/bash
+
+# ALIASES_ARRAY
+# Macro for getting the accurate array for aliases
+#
+#> if "SHELL_NAME" eq "zsh"
+#>    define ALIASES_ARRAY aliases
+#> else
+#>    define ALIASES_ARRAY BASH_ALIASES
+#> endif
+
+# GET_ALIAS
+# Macro for expanding an alias
+#
+#> define GET_ALIAS(al) "${ALIASES_ARRAY[al]:-al}"
+
+getAlias() {
+   echo GET_ALIAS($1)
+}
+
+getAliasArgs() {
+   local al=GET_ALIAS($1)
+   local args="${al#* }"
+   if [[ "$al" == "$args" ]]; then
+      echo
+   else
+      echo "$args"
+   fi
+}
+
+# ls ##########################################################################
+alias \
+ls='ls LS_COLOR' \
+ l='ls LS_COLOR -la' \
+ll='ls LS_COLOR -l' \
+la='ls LS_COLOR -A'
+
+# grep ########################################################################
+#> define GREP_OPTS --color=auto
+alias \
+    g='grep GREP_OPTS' \
+ grep='grep GREP_OPTS' \
+fgrep='grep GREP_OPTS -F' \
+igrep='grep GREP_OPTS -i' \
+egrep='grep GREP_OPTS -E'
+
+# cd-aliases ##################################################################
+#> define CD_COMMAND pushd
+alias -- \
+      -='CD_COMMAND -' \
+     ..='CD_COMMAND ..' \
+    ...='CD_COMMAND ../..' \
+   ....='CD_COMMAND ../../..' \
+  .....='CD_COMMAND ../../../..' \
+ ......='CD_COMMAND ../../../../..' \
+.......='CD_COMMAND ../../../../../..'
+
+# "Core Utils" ################################################################
+# Be Verbose/Interactive/Safe #################################################
+alias cp='cp -v -p -i'
+alias rm='rm -v PRESERVE_ROOT ONE_FILE_SYSTEM'
+alias mv='mv -v -i'
+alias mkdir='mkdir -v'
+alias rmdir='rmdir -v'
+alias chmod='chmod -v PRESERVE_ROOT'
+alias chown='chown -v PRESERVE_ROOT'
+alias ln='ln -v -i'
+
+# Systemd #####################################################################
+alias sctl=systemctl
+alias jctl=journalctl
+#> if "SHELL_NAME" eq "zsh"
+compdef _systemctl sctl
+compdef _journalctl jctl
+#> elif "SHELL_NAME" eq "bash"
+complete -F _systemctl sctl
+complete -F _journalctl jctl
+_completion_loader systemctl
+_completion_loader journalctl
+#> endif
+
+# Sudo fix ####################################################################
+#  This enables resolution of shell aliases when using sudo
+alias sudo='sudo '
+
+# Don't create the annoying ~/.xsel.log file ##################################
+alias xsel='xsel -l /dev/null'
+
+# Start tmux with 256 colors ##################################################
+alias tmux='tmux -2'
+
+# vi aliases ##################################################################
+#> if "HAVE_NVIM" eq "1"
+alias    v='nvim'
+alias   vi='nvim'
+alias  vim='nvim'
+#> else
+alias    v='vim'
+alias   vi='vim'
+#> endif
+
+# misc aliases ################################################################
+alias more='less'
+alias info='info --vi-keys'
+
+#> if "HAVE_MAN_PROMPT" eq "1"
+alias man="man -r ' Manual page \$MAN_PN line %lt?L/%L.:byte %bB?s/%s..? (END):?pB %pB\\%.. '"
+#> endif
+
+alias openports='netstat --all --numeric --programs --inet'
+alias killflash='pkill -f flash'
+alias dis='bg;disown'
+alias pip='pip --disable-pip-version-check'
+
+# browsers ####################################################################
+alias inox-facebook="
+   inox --user-data-dir=$HOME/.browsers/inox-facebook --proxy-server=http://localhost:8118 --host-resolver-rules='MAP * ~NOTFOUND , EXCLUDE localhost'"
+alias inox-messenger="
+   inox --user-data-dir=$HOME/.browsers/inox-messenger"
+
+#> define COLORIZE_EXCLUDE wget|ls|ulimit|grep|dmesg|jobs
+#> define COLORIZE_ALIAS_FILE "${TMPDIR:-/tmp}/.$USER.zsh.coloraliases"
+
+__colorize_alias() {
+   local name=$1; shift
+   if ! grep -q "^alias $name=" COLORIZE_ALIAS_FILE &>/dev/null; then
+      printf "alias %s=%q\n" "$name" "$1" | sed 's/\\ $//' >> COLORIZE_ALIAS_FILE
+   fi
+}
+
+__colorize_cope() {
+   #> define COPE_EXCLUDE cope|nocope
+
+   if which cope_path &>/dev/null; then
+      local COPE_PATH=$(cope_path)
+      if pushd "$COPE_PATH" &>/dev/null; then
+         local BIN
+         printf "%s\n" * | grep -v -E "^(COLORIZE_EXCLUDE|COPE_EXCLUDE)$" | while read -r BIN; do
+            [[ -n "$BIN" ]] || continue
+            __colorize_alias "$BIN" "$COPE_PATH/$BIN $(getAliasArgs $BIN)"
+         done
+
+         popd &>/dev/null
+      fi
+   fi
+}
+
+__colorize_grc() {
+   if pushd /usr/share/grc &>/dev/null; then
+      local BIN
+      printf "%s\n" * | sed 's/^conf.//g' | grep -v -E "^(COLORIZE_EXCLUDE)$" | while read -r BIN; do
+         [[ -n "$BIN" ]] || continue
+         __colorize_alias "$BIN" "grc $(getAlias $BIN)"
+      done
+
+      popd &>/dev/null
+   fi
+}
+
+__colorize_cw() {
+   #> define CW_EXCLUDE etc|cw-pipe|cw-test.cgi
+
+   if pushd /usr/lib/cw &>/dev/null; then
+      local BIN
+      printf "%s\n" * | grep -v -F '@' | grep -v -E "^(COLORIZE_EXCLUDE|CW_EXCLUDE)$" | while read -r BIN; do
+         [[ -n "$BIN" ]] || continue
+         __colorize_alias "$BIN" "/usr/lib/cw/$BIN $(getAliasArgs $BIN)"
+      done
+
+      popd &>/dev/null
+   fi
+}
+
+__colorize_commands() {
+   if ! [[ -f COLORIZE_ALIAS_FILE ]]; then
+      :> COLORIZE_ALIAS_FILE
+
+      #> if COLORIZE_COPE == 1
+      __colorize_cope
+      #> endif
+
+      #> if COLORIZE_GRC == 1
+      __colorize_grc
+      #> endif
+
+      #> if COLORIZE_CW == 1
+      __colorize_cw
+      #> endif
+   fi
+
+   source COLORIZE_ALIAS_FILE
+}
+
+__tmux_singleton_call() {
+   local name=$1; shift
+#> if "TMUX_VERSION" lt "2.6"
+   tmux find-window -N "$name" &>/dev/null || command "$name" "$@"
+#> else
+   command "$name" "$@"
+#> endif
+}
+
+
+__tmux_singleton_register() {
+   local name=$1; shift
+   eval "function $name() { __tmux_singleton_call $name \"\$@\"; }"
+}
+
+__colorize_commands
+__tmux_singleton_register htop
+__tmux_singleton_register ncmpcpp
+__tmux_singleton_register finch
+__tmux_singleton_register iotop
+__tmux_singleton_register iftop
+__tmux_singleton_register alsamixer
+
+# vim: ft=sh

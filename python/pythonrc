@@ -1,0 +1,28 @@
+# Import important stuff
+import os
+import rlcompleter
+import readline
+import sys
+import atexit
+import re
+import time
+import timeit
+
+# History
+history_file = '~/.python_history'
+
+# expand tilde ~
+history_file = os.path.expanduser(history_file)
+
+# create history file if it does not exist
+if not os.path.exists(history_file):
+   open(history_file, 'w').close()
+
+# read history file
+readline.read_history_file(history_file)
+
+# write history file on exit
+atexit.register(readline.write_history_file, history_file)
+
+# Enable Tab-Completion
+readline.parse_and_bind('tab:complete')

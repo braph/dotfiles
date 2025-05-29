@@ -1,0 +1,3 @@
+prefix_dir: ".dillo"
+
+filepp_modules: ["testfile.pm"]

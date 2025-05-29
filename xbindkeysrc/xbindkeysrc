@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Use mouse buttons on the side for PageUp/PageDown
+# (This replaces "imwheel")
+"xdotool key Next"
+  b:8
+
+"xdotool key Prior"
+  b:9
+
+# mouse navigation shit.
+# "xdotool click 1"
+#   Mod4 + Return
+# 
+# "xdotool click 2"
+#   Mod4 + Shift + Return
+# 
+# "xdotool mousemove_relative -- 200 0"
+#   Mod4 + Shift + l
+# 
+# "xdotool mousemove_relative -- -200 0"
+#   Mod4 + Shift + h
+# 
+# "xdotool mousemove_relative -- 0 -200"
+#   Mod4 + Shift + k
+# 
+# "xdotool mousemove_relative -- 0 200"
+#   Mod4 + Shift + j
+# 
+# "xdotool mousemove_relative -- 50 0"
+#   Mod4 + Mod1 + l
+# 
+# "xdotool mousemove_relative -- -50 0"
+#   Mod4 + Mod1 + h
+# 
+# "xdotool mousemove_relative -- 0 -50"
+#   Mod4 + Mod1 + k
+# 
+# "xdotool mousemove_relative -- 0 50"
+#   Mod4 + Mod1 + j
+# 
+# "xdotool mousemove_relative -- 15 0"
+#   Mod4 + l
+# 
+# "xdotool mousemove_relative -- -15 0"
+#   Mod4 + h
+# 
+# "xdotool mousemove_relative -- 0 -15"
+#   Mod4 + k
+# 
+# "xdotool mousemove_relative -- 0 15"
+#   Mod4 + j
+
+# Right Side of my Keyboard [Order:UP-DOWN]
+"firefox"
+ XF86Favorites
+
+"killall -CONT palemoon"
+ XF86HomePage
+
+"killall -KILL plugin-container; killall -STOP palemoon"
+ Mod2 + XF86HomePage
+
+"thunderbird"
+ XF86Mail
+
+"firefox"
+ XF86Search
+
+"nvidia-settings"
+ XF86Explorer
+
+"terminator -e bc"
+ XF86Calculator
+
+# Left Side of my Keyboard...
+# Upper Left Corner:
+"true"
+ XF86Tools
+
+# Music stuff
+"mpc toggle"
+ XF86AudioPlay
+
+"mpc prev"
+ XF86AudioPrev
+
+"mpc next"
+ XF86AudioNext
+
+"mpc stop"
+ XF86AudioStop
+
+ #XF86Reload
+
+"sudo systemctl suspend"
+ Mod2 + XF86Sleep
+
+# Audio Stuff
+"amixer -c 0 set Master 5+"
+ XF86AudioRaiseVolume
+
+"amixer -c 0 set Master 5-"
+ XF86AudioLowerVolume
+
+"amixer -c 0 set Master toggle"
+ XF86AudioMute

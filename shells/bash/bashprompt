@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# http://jonisalonen.com/2012/your-bash-prompt-needs-this/
+#> define TERM_GOTO_FIRST_COL "\033[G"
+
+PS1=TERM_GOTO_FIRST_COL'[\u@\h \W]\$ '
+
+# vim: ft=sh

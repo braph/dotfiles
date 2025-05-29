@@ -1,0 +1,7 @@
+!> if REMAP_NUMPAD
+!> include remap_numpad.xmodmap
+!> endif
+!
+!> if GERMANIZE
+!> include germanize.xmodmap
+!> endif

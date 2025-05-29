@@ -1,0 +1,23 @@
+defines:
+  THEME_COLOR: "blue"
+  MUSIC_DIR:  "/media/main/music"
+  NCMPCPP_VERSION: |
+    SHELL:
+      if type ncmpcpp &>/dev/null; then
+        ncmpcpp --version | sed -n 's/ncmpcpp //p;q';
+      else
+        echo 0.0
+      fi
+
+prefix_dir: ".config/ncmpcpp"
+
+ignore_files: ["makeDummyBindings.sh"]
+
+filepp_modules: ["hash-comment.pm", "remove-empty-lines.pm"]
+
+# TODO: It's been a while since I used ncmpcpp, I think that the output
+# of ./makeDummyBindings should be *prepended* to bindings instead of 
+# appended?
+
+post_build: |
+  ./makeDummyBindings.sh >> "$BUILD_DIR/.config/ncmpcpp/bindings"

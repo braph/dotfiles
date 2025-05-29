@@ -1,0 +1,13 @@
+defines:
+  HEADER_CACHE: "header_cache"
+  REALNAME:     "Benjamin Abendroth"
+  EMAIL:        "braph93@gmx.de"
+
+prefix_dir: ".mutt"
+
+pp_files: ["muttrc"]
+
+filepp_modules: ["testfile.pm"]
+
+post_install:
+  mkdir -p "$DEST_DIR/.mutt/$HEADER_CACHE"
