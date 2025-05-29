@@ -29,9 +29,9 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.w3m"
-  cp -p "config" "$BUILD_DIR/.w3m/config"
-  cp -p "keymap" "$BUILD_DIR/.w3m/keymap"
   cp -p "w3m_external_browser" "$BUILD_DIR/.w3m/w3m_external_browser"
+  cp -p "keymap" "$BUILD_DIR/.w3m/keymap"
+  cp -p "config" "$BUILD_DIR/.w3m/config"
   post_build
 }
 
@@ -46,9 +46,9 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.w3m"
-  cp -p "$BUILD_DIR/.w3m/config" "$DEST_DIR/.w3m/config"
-  cp -p "$BUILD_DIR/.w3m/keymap" "$DEST_DIR/.w3m/keymap"
   cp -p "$BUILD_DIR/.w3m/w3m_external_browser" "$DEST_DIR/.w3m/w3m_external_browser"
+  cp -p "$BUILD_DIR/.w3m/keymap" "$DEST_DIR/.w3m/keymap"
+  cp -p "$BUILD_DIR/.w3m/config" "$DEST_DIR/.w3m/config"
   post_install
 }
 
@@ -62,12 +62,12 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  if [ -e "$DEST_DIR/.w3m/config" ]; then
-    if ! $DIFF "$BUILD_DIR/.w3m/config" "$DEST_DIR/.w3m/config"; then
-      echo " ^--- .w3m/config"
+  if [ -e "$DEST_DIR/.w3m/w3m_external_browser" ]; then
+    if ! $DIFF "$BUILD_DIR/.w3m/w3m_external_browser" "$DEST_DIR/.w3m/w3m_external_browser"; then
+      echo " ^--- .w3m/w3m_external_browser"
     fi
   else
-    echo "No such file or directory: '$DEST_DIR/.w3m/config'"
+    echo "No such file or directory: '$DEST_DIR/.w3m/w3m_external_browser'"
   fi
   if [ -e "$DEST_DIR/.w3m/keymap" ]; then
     if ! $DIFF "$BUILD_DIR/.w3m/keymap" "$DEST_DIR/.w3m/keymap"; then
@@ -76,12 +76,12 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.w3m/keymap'"
   fi
-  if [ -e "$DEST_DIR/.w3m/w3m_external_browser" ]; then
-    if ! $DIFF "$BUILD_DIR/.w3m/w3m_external_browser" "$DEST_DIR/.w3m/w3m_external_browser"; then
-      echo " ^--- .w3m/w3m_external_browser"
+  if [ -e "$DEST_DIR/.w3m/config" ]; then
+    if ! $DIFF "$BUILD_DIR/.w3m/config" "$DEST_DIR/.w3m/config"; then
+      echo " ^--- .w3m/config"
     fi
   else
-    echo "No such file or directory: '$DEST_DIR/.w3m/w3m_external_browser'"
+    echo "No such file or directory: '$DEST_DIR/.w3m/config'"
   fi
 }
 
@@ -121,9 +121,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -169,7 +171,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -195,8 +197,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

@@ -57,22 +57,24 @@ cmd_build() {
 }
 
 post_install() {
+  OLDPWD="$PWD"
+
   # vim
   mkdir -p "$DEST_DIR/.vim/view"
   mkdir -p "$DEST_DIR/.vim/bundle"
 
-  pushd "$DEST_DIR/.vim/bundle" && {
+  cd "$DEST_DIR/.vim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    popd
+    cd "$OLDPWD"
   } || true
 
   # nvim
   mkdir -p "$DEST_DIR/.config/nvim/view"
   mkdir -p "$DEST_DIR/.config/nvim/bundle"
 
-  pushd "$DEST_DIR/.config/nvim/bundle" && {
+  cd "$DEST_DIR/.config/nvim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    popd
+    cd "$OLDPWD"
   } || true
 
 }
@@ -84,10 +86,10 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/"
-  mkdir -p "$DEST_DIR/.config/nvim/syntax"
-  mkdir -p "$DEST_DIR/.vim/syntax"
-  mkdir -p "$DEST_DIR/.vim/skeltons"
   mkdir -p "$DEST_DIR/.config/nvim/skeltons"
+  mkdir -p "$DEST_DIR/.vim/skeltons"
+  mkdir -p "$DEST_DIR/.vim/syntax"
+  mkdir -p "$DEST_DIR/.config/nvim/syntax"
   mkdir -p "$DEST_DIR/.config/nvim"
   cp -p "$BUILD_DIR/.vimrc" "$DEST_DIR/.vimrc"
   cp -p "$BUILD_DIR/.config/nvim/init.vim" "$DEST_DIR/.config/nvim/init.vim"
@@ -291,9 +293,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -339,7 +343,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -365,8 +369,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

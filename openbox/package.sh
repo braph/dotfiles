@@ -29,9 +29,9 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.config/openbox"
+  cp -p "toggle_stop.sh" "$BUILD_DIR/.config/openbox/toggle_stop.sh"
   cp -p "rc.xml" "$BUILD_DIR/.config/openbox/rc.xml"
   cp -p "menu.xml" "$BUILD_DIR/.config/openbox/menu.xml"
-  cp -p "toggle_stop.sh" "$BUILD_DIR/.config/openbox/toggle_stop.sh"
   post_build
 }
 
@@ -46,9 +46,9 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.config/openbox"
+  cp -p "$BUILD_DIR/.config/openbox/toggle_stop.sh" "$DEST_DIR/.config/openbox/toggle_stop.sh"
   cp -p "$BUILD_DIR/.config/openbox/rc.xml" "$DEST_DIR/.config/openbox/rc.xml"
   cp -p "$BUILD_DIR/.config/openbox/menu.xml" "$DEST_DIR/.config/openbox/menu.xml"
-  cp -p "$BUILD_DIR/.config/openbox/toggle_stop.sh" "$DEST_DIR/.config/openbox/toggle_stop.sh"
   post_install
 }
 
@@ -64,6 +64,13 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
+  if [ -e "$DEST_DIR/.config/openbox/toggle_stop.sh" ]; then
+    if ! $DIFF "$BUILD_DIR/.config/openbox/toggle_stop.sh" "$DEST_DIR/.config/openbox/toggle_stop.sh"; then
+      echo " ^--- .config/openbox/toggle_stop.sh"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.config/openbox/toggle_stop.sh'"
+  fi
   if [ -e "$DEST_DIR/.config/openbox/rc.xml" ]; then
     if ! $DIFF "$BUILD_DIR/.config/openbox/rc.xml" "$DEST_DIR/.config/openbox/rc.xml"; then
       echo " ^--- .config/openbox/rc.xml"
@@ -77,13 +84,6 @@ cmd_diff() {
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.config/openbox/menu.xml'"
-  fi
-  if [ -e "$DEST_DIR/.config/openbox/toggle_stop.sh" ]; then
-    if ! $DIFF "$BUILD_DIR/.config/openbox/toggle_stop.sh" "$DEST_DIR/.config/openbox/toggle_stop.sh"; then
-      echo " ^--- .config/openbox/toggle_stop.sh"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.config/openbox/toggle_stop.sh'"
   fi
 }
 
@@ -123,9 +123,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -171,7 +173,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -197,8 +199,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

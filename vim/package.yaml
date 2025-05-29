@@ -32,22 +32,24 @@ files:
   ".config/nvim/syntax/tmux.vim":         "syntax/tmux.vim"
 
 post_install: |
+  OLDPWD="$PWD"
+
   # vim
   mkdir -p "$DEST_DIR/.vim/view"
   mkdir -p "$DEST_DIR/.vim/bundle"
 
-  pushd "$DEST_DIR/.vim/bundle" && {
+  cd "$DEST_DIR/.vim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    popd
+    cd "$OLDPWD"
   } || true
 
   # nvim
   mkdir -p "$DEST_DIR/.config/nvim/view"
   mkdir -p "$DEST_DIR/.config/nvim/bundle"
 
-  pushd "$DEST_DIR/.config/nvim/bundle" && {
+  cd "$DEST_DIR/.config/nvim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    popd
+    cd "$OLDPWD"
   } || true
 
 apply: |

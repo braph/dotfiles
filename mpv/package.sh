@@ -29,8 +29,8 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.config/mpv"
-  cp -p "input.conf" "$BUILD_DIR/.config/mpv/input.conf"
   cp -p "mpv.conf" "$BUILD_DIR/.config/mpv/mpv.conf"
+  cp -p "input.conf" "$BUILD_DIR/.config/mpv/input.conf"
   post_build
 }
 
@@ -45,8 +45,8 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.config/mpv"
-  cp -p "$BUILD_DIR/.config/mpv/input.conf" "$DEST_DIR/.config/mpv/input.conf"
   cp -p "$BUILD_DIR/.config/mpv/mpv.conf" "$DEST_DIR/.config/mpv/mpv.conf"
+  cp -p "$BUILD_DIR/.config/mpv/input.conf" "$DEST_DIR/.config/mpv/input.conf"
   post_install
 }
 
@@ -60,19 +60,19 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  if [ -e "$DEST_DIR/.config/mpv/input.conf" ]; then
-    if ! $DIFF "$BUILD_DIR/.config/mpv/input.conf" "$DEST_DIR/.config/mpv/input.conf"; then
-      echo " ^--- .config/mpv/input.conf"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.config/mpv/input.conf'"
-  fi
   if [ -e "$DEST_DIR/.config/mpv/mpv.conf" ]; then
     if ! $DIFF "$BUILD_DIR/.config/mpv/mpv.conf" "$DEST_DIR/.config/mpv/mpv.conf"; then
       echo " ^--- .config/mpv/mpv.conf"
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.config/mpv/mpv.conf'"
+  fi
+  if [ -e "$DEST_DIR/.config/mpv/input.conf" ]; then
+    if ! $DIFF "$BUILD_DIR/.config/mpv/input.conf" "$DEST_DIR/.config/mpv/input.conf"; then
+      echo " ^--- .config/mpv/input.conf"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.config/mpv/input.conf'"
   fi
 }
 
@@ -112,9 +112,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -160,7 +162,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -186,8 +188,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

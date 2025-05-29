@@ -41,8 +41,8 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.config/ncmpcpp"
-  "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DMUSIC_DIR="$MUSIC_DIR" -DNCMPCPP_VERSION="$NCMPCPP_VERSION" -M.filepp_modules -m hash-comment.pm -m remove-empty-lines.pm -kc '#>' -ec ENVIRONMENT. bindings.pp -o "$BUILD_DIR/.config/ncmpcpp/bindings"
   "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DMUSIC_DIR="$MUSIC_DIR" -DNCMPCPP_VERSION="$NCMPCPP_VERSION" -M.filepp_modules -m hash-comment.pm -m remove-empty-lines.pm -kc '#>' -ec ENVIRONMENT. config.pp -o "$BUILD_DIR/.config/ncmpcpp/config"
+  "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DMUSIC_DIR="$MUSIC_DIR" -DNCMPCPP_VERSION="$NCMPCPP_VERSION" -M.filepp_modules -m hash-comment.pm -m remove-empty-lines.pm -kc '#>' -ec ENVIRONMENT. bindings.pp -o "$BUILD_DIR/.config/ncmpcpp/bindings"
   post_build
 }
 
@@ -57,8 +57,8 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.config/ncmpcpp"
-  cp -p "$BUILD_DIR/.config/ncmpcpp/bindings" "$DEST_DIR/.config/ncmpcpp/bindings"
   cp -p "$BUILD_DIR/.config/ncmpcpp/config" "$DEST_DIR/.config/ncmpcpp/config"
+  cp -p "$BUILD_DIR/.config/ncmpcpp/bindings" "$DEST_DIR/.config/ncmpcpp/bindings"
   post_install
 }
 
@@ -72,19 +72,19 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  if [ -e "$DEST_DIR/.config/ncmpcpp/bindings" ]; then
-    if ! $DIFF "$BUILD_DIR/.config/ncmpcpp/bindings" "$DEST_DIR/.config/ncmpcpp/bindings"; then
-      echo " ^--- .config/ncmpcpp/bindings"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.config/ncmpcpp/bindings'"
-  fi
   if [ -e "$DEST_DIR/.config/ncmpcpp/config" ]; then
     if ! $DIFF "$BUILD_DIR/.config/ncmpcpp/config" "$DEST_DIR/.config/ncmpcpp/config"; then
       echo " ^--- .config/ncmpcpp/config"
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.config/ncmpcpp/config'"
+  fi
+  if [ -e "$DEST_DIR/.config/ncmpcpp/bindings" ]; then
+    if ! $DIFF "$BUILD_DIR/.config/ncmpcpp/bindings" "$DEST_DIR/.config/ncmpcpp/bindings"; then
+      echo " ^--- .config/ncmpcpp/bindings"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.config/ncmpcpp/bindings'"
   fi
 }
 
@@ -127,9 +127,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -175,7 +177,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -201,8 +203,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

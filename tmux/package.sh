@@ -40,13 +40,13 @@ cmd_build() {
   mkdir -p "$BUILD_DIR/"
   mkdir -p "$BUILD_DIR/.tmux/bin"
   "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DDEFAULT_SHELL="$DEFAULT_SHELL" -DHAVE_DEV_SHM="$HAVE_DEV_SHM" -M.filepp_modules -m bigdef.pm -m function.pm -m hash-comment.pm -m remove-empty-lines.pm -kc '#>' -ec ENVIRONMENT. tmux.conf.pp -o "$BUILD_DIR/.tmux.conf"
+  cp -p "tmux/bin/zsh_read" "$BUILD_DIR/.tmux/bin/zsh_read"
   cp -p "tmux/bin/websearch" "$BUILD_DIR/.tmux/bin/websearch"
+  cp -p "tmux/bin/w3m_openurl" "$BUILD_DIR/.tmux/bin/w3m_openurl"
   cp -p "tmux/bin/tmux_daemon.pl" "$BUILD_DIR/.tmux/bin/tmux_daemon.pl"
   cp -p "tmux/bin/simpleread" "$BUILD_DIR/.tmux/bin/simpleread"
-  cp -p "tmux/bin/w3m_openurl" "$BUILD_DIR/.tmux/bin/w3m_openurl"
   cp -p "tmux/bin/menu" "$BUILD_DIR/.tmux/bin/menu"
   cp -p "tmux/bin/aggressive_window_switch" "$BUILD_DIR/.tmux/bin/aggressive_window_switch"
-  cp -p "tmux/bin/zsh_read" "$BUILD_DIR/.tmux/bin/zsh_read"
   post_build
 }
 
@@ -63,13 +63,13 @@ cmd_install() {
   mkdir -p "$DEST_DIR/"
   mkdir -p "$DEST_DIR/.tmux/bin"
   cp -p "$BUILD_DIR/.tmux.conf" "$DEST_DIR/.tmux.conf"
+  cp -p "$BUILD_DIR/.tmux/bin/zsh_read" "$DEST_DIR/.tmux/bin/zsh_read"
   cp -p "$BUILD_DIR/.tmux/bin/websearch" "$DEST_DIR/.tmux/bin/websearch"
+  cp -p "$BUILD_DIR/.tmux/bin/w3m_openurl" "$DEST_DIR/.tmux/bin/w3m_openurl"
   cp -p "$BUILD_DIR/.tmux/bin/tmux_daemon.pl" "$DEST_DIR/.tmux/bin/tmux_daemon.pl"
   cp -p "$BUILD_DIR/.tmux/bin/simpleread" "$DEST_DIR/.tmux/bin/simpleread"
-  cp -p "$BUILD_DIR/.tmux/bin/w3m_openurl" "$DEST_DIR/.tmux/bin/w3m_openurl"
   cp -p "$BUILD_DIR/.tmux/bin/menu" "$DEST_DIR/.tmux/bin/menu"
   cp -p "$BUILD_DIR/.tmux/bin/aggressive_window_switch" "$DEST_DIR/.tmux/bin/aggressive_window_switch"
-  cp -p "$BUILD_DIR/.tmux/bin/zsh_read" "$DEST_DIR/.tmux/bin/zsh_read"
   post_install
 }
 
@@ -93,12 +93,26 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.tmux.conf'"
   fi
+  if [ -e "$DEST_DIR/.tmux/bin/zsh_read" ]; then
+    if ! $DIFF "$BUILD_DIR/.tmux/bin/zsh_read" "$DEST_DIR/.tmux/bin/zsh_read"; then
+      echo " ^--- .tmux/bin/zsh_read"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.tmux/bin/zsh_read'"
+  fi
   if [ -e "$DEST_DIR/.tmux/bin/websearch" ]; then
     if ! $DIFF "$BUILD_DIR/.tmux/bin/websearch" "$DEST_DIR/.tmux/bin/websearch"; then
       echo " ^--- .tmux/bin/websearch"
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.tmux/bin/websearch'"
+  fi
+  if [ -e "$DEST_DIR/.tmux/bin/w3m_openurl" ]; then
+    if ! $DIFF "$BUILD_DIR/.tmux/bin/w3m_openurl" "$DEST_DIR/.tmux/bin/w3m_openurl"; then
+      echo " ^--- .tmux/bin/w3m_openurl"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.tmux/bin/w3m_openurl'"
   fi
   if [ -e "$DEST_DIR/.tmux/bin/tmux_daemon.pl" ]; then
     if ! $DIFF "$BUILD_DIR/.tmux/bin/tmux_daemon.pl" "$DEST_DIR/.tmux/bin/tmux_daemon.pl"; then
@@ -114,13 +128,6 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.tmux/bin/simpleread'"
   fi
-  if [ -e "$DEST_DIR/.tmux/bin/w3m_openurl" ]; then
-    if ! $DIFF "$BUILD_DIR/.tmux/bin/w3m_openurl" "$DEST_DIR/.tmux/bin/w3m_openurl"; then
-      echo " ^--- .tmux/bin/w3m_openurl"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.tmux/bin/w3m_openurl'"
-  fi
   if [ -e "$DEST_DIR/.tmux/bin/menu" ]; then
     if ! $DIFF "$BUILD_DIR/.tmux/bin/menu" "$DEST_DIR/.tmux/bin/menu"; then
       echo " ^--- .tmux/bin/menu"
@@ -134,13 +141,6 @@ cmd_diff() {
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.tmux/bin/aggressive_window_switch'"
-  fi
-  if [ -e "$DEST_DIR/.tmux/bin/zsh_read" ]; then
-    if ! $DIFF "$BUILD_DIR/.tmux/bin/zsh_read" "$DEST_DIR/.tmux/bin/zsh_read"; then
-      echo " ^--- .tmux/bin/zsh_read"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.tmux/bin/zsh_read'"
   fi
 }
 
@@ -183,9 +183,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -231,7 +233,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -257,8 +259,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

@@ -35,8 +35,8 @@ cmd_build() {
   mkdir -p "$BUILD_DIR/.moc"
   mkdir -p "$BUILD_DIR/.moc/themes"
   "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DUSE_THEME="$USE_THEME" -M.filepp_modules -kc '#>' -ec ENVIRONMENT. config.pp -o "$BUILD_DIR/.moc/config"
-  "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DUSE_THEME="$USE_THEME" -M.filepp_modules -kc '#>' -ec ENVIRONMENT. themes/full.pp -o "$BUILD_DIR/.moc/themes/full"
   "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DUSE_THEME="$USE_THEME" -M.filepp_modules -kc '#>' -ec ENVIRONMENT. themes/normal.pp -o "$BUILD_DIR/.moc/themes/normal"
+  "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DUSE_THEME="$USE_THEME" -M.filepp_modules -kc '#>' -ec ENVIRONMENT. themes/full.pp -o "$BUILD_DIR/.moc/themes/full"
   "$FILEPP" -DTHEME_COLOR="$THEME_COLOR" -DUSE_THEME="$USE_THEME" -M.filepp_modules -kc '#>' -ec ENVIRONMENT. themes/frame.pp -o "$BUILD_DIR/.moc/themes/frame"
   cp -p "keymap" "$BUILD_DIR/.moc/keymap"
   cp -p "themes/template" "$BUILD_DIR/.moc/themes/template"
@@ -53,11 +53,11 @@ cmd_install() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  mkdir -p "$DEST_DIR/.moc/themes"
   mkdir -p "$DEST_DIR/.moc"
+  mkdir -p "$DEST_DIR/.moc/themes"
   cp -p "$BUILD_DIR/.moc/config" "$DEST_DIR/.moc/config"
-  cp -p "$BUILD_DIR/.moc/themes/full" "$DEST_DIR/.moc/themes/full"
   cp -p "$BUILD_DIR/.moc/themes/normal" "$DEST_DIR/.moc/themes/normal"
+  cp -p "$BUILD_DIR/.moc/themes/full" "$DEST_DIR/.moc/themes/full"
   cp -p "$BUILD_DIR/.moc/themes/frame" "$DEST_DIR/.moc/themes/frame"
   cp -p "$BUILD_DIR/.moc/keymap" "$DEST_DIR/.moc/keymap"
   cp -p "$BUILD_DIR/.moc/themes/template" "$DEST_DIR/.moc/themes/template"
@@ -81,19 +81,19 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.moc/config'"
   fi
-  if [ -e "$DEST_DIR/.moc/themes/full" ]; then
-    if ! $DIFF "$BUILD_DIR/.moc/themes/full" "$DEST_DIR/.moc/themes/full"; then
-      echo " ^--- .moc/themes/full"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.moc/themes/full'"
-  fi
   if [ -e "$DEST_DIR/.moc/themes/normal" ]; then
     if ! $DIFF "$BUILD_DIR/.moc/themes/normal" "$DEST_DIR/.moc/themes/normal"; then
       echo " ^--- .moc/themes/normal"
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.moc/themes/normal'"
+  fi
+  if [ -e "$DEST_DIR/.moc/themes/full" ]; then
+    if ! $DIFF "$BUILD_DIR/.moc/themes/full" "$DEST_DIR/.moc/themes/full"; then
+      echo " ^--- .moc/themes/full"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.moc/themes/full'"
   fi
   if [ -e "$DEST_DIR/.moc/themes/frame" ]; then
     if ! $DIFF "$BUILD_DIR/.moc/themes/frame" "$DEST_DIR/.moc/themes/frame"; then
@@ -156,9 +156,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -204,7 +206,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -230,8 +232,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

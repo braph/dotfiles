@@ -29,15 +29,15 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.themes/braph/openbox-3"
-  cp -p "braph/openbox-3/bullet.xbm" "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm"
-  cp -p "braph/openbox-3/iconify.xbm" "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm"
-  cp -p "braph/openbox-3/shade.xbm" "$BUILD_DIR/.themes/braph/openbox-3/shade.xbm"
   cp -p "braph/openbox-3/themerc" "$BUILD_DIR/.themes/braph/openbox-3/themerc"
-  cp -p "braph/openbox-3/desk_toggled.xbm" "$BUILD_DIR/.themes/braph/openbox-3/desk_toggled.xbm"
-  cp -p "braph/openbox-3/close.xbm" "$BUILD_DIR/.themes/braph/openbox-3/close.xbm"
+  cp -p "braph/openbox-3/shade.xbm" "$BUILD_DIR/.themes/braph/openbox-3/shade.xbm"
   cp -p "braph/openbox-3/max.xbm" "$BUILD_DIR/.themes/braph/openbox-3/max.xbm"
-  cp -p "braph/openbox-3/bullet-small.xbm" "$BUILD_DIR/.themes/braph/openbox-3/bullet-small.xbm"
+  cp -p "braph/openbox-3/iconify.xbm" "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm"
+  cp -p "braph/openbox-3/desk_toggled.xbm" "$BUILD_DIR/.themes/braph/openbox-3/desk_toggled.xbm"
   cp -p "braph/openbox-3/desk.xbm" "$BUILD_DIR/.themes/braph/openbox-3/desk.xbm"
+  cp -p "braph/openbox-3/close.xbm" "$BUILD_DIR/.themes/braph/openbox-3/close.xbm"
+  cp -p "braph/openbox-3/bullet.xbm" "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm"
+  cp -p "braph/openbox-3/bullet-small.xbm" "$BUILD_DIR/.themes/braph/openbox-3/bullet-small.xbm"
   post_build
 }
 
@@ -52,15 +52,15 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.themes/braph/openbox-3"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm" "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/shade.xbm" "$DEST_DIR/.themes/braph/openbox-3/shade.xbm"
   cp -p "$BUILD_DIR/.themes/braph/openbox-3/themerc" "$DEST_DIR/.themes/braph/openbox-3/themerc"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/desk_toggled.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk_toggled.xbm"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/close.xbm" "$DEST_DIR/.themes/braph/openbox-3/close.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/shade.xbm" "$DEST_DIR/.themes/braph/openbox-3/shade.xbm"
   cp -p "$BUILD_DIR/.themes/braph/openbox-3/max.xbm" "$DEST_DIR/.themes/braph/openbox-3/max.xbm"
-  cp -p "$BUILD_DIR/.themes/braph/openbox-3/bullet-small.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet-small.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm" "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/desk_toggled.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk_toggled.xbm"
   cp -p "$BUILD_DIR/.themes/braph/openbox-3/desk.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/close.xbm" "$DEST_DIR/.themes/braph/openbox-3/close.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm"
+  cp -p "$BUILD_DIR/.themes/braph/openbox-3/bullet-small.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet-small.xbm"
   post_install
 }
 
@@ -74,19 +74,12 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  if [ -e "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm" ]; then
-    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm"; then
-      echo " ^--- .themes/braph/openbox-3/bullet.xbm"
+  if [ -e "$DEST_DIR/.themes/braph/openbox-3/themerc" ]; then
+    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/themerc" "$DEST_DIR/.themes/braph/openbox-3/themerc"; then
+      echo " ^--- .themes/braph/openbox-3/themerc"
     fi
   else
-    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/bullet.xbm'"
-  fi
-  if [ -e "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm" ]; then
-    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm" "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm"; then
-      echo " ^--- .themes/braph/openbox-3/iconify.xbm"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/iconify.xbm'"
+    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/themerc'"
   fi
   if [ -e "$DEST_DIR/.themes/braph/openbox-3/shade.xbm" ]; then
     if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/shade.xbm" "$DEST_DIR/.themes/braph/openbox-3/shade.xbm"; then
@@ -95,12 +88,19 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/shade.xbm'"
   fi
-  if [ -e "$DEST_DIR/.themes/braph/openbox-3/themerc" ]; then
-    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/themerc" "$DEST_DIR/.themes/braph/openbox-3/themerc"; then
-      echo " ^--- .themes/braph/openbox-3/themerc"
+  if [ -e "$DEST_DIR/.themes/braph/openbox-3/max.xbm" ]; then
+    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/max.xbm" "$DEST_DIR/.themes/braph/openbox-3/max.xbm"; then
+      echo " ^--- .themes/braph/openbox-3/max.xbm"
     fi
   else
-    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/themerc'"
+    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/max.xbm'"
+  fi
+  if [ -e "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm" ]; then
+    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/iconify.xbm" "$DEST_DIR/.themes/braph/openbox-3/iconify.xbm"; then
+      echo " ^--- .themes/braph/openbox-3/iconify.xbm"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/iconify.xbm'"
   fi
   if [ -e "$DEST_DIR/.themes/braph/openbox-3/desk_toggled.xbm" ]; then
     if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/desk_toggled.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk_toggled.xbm"; then
@@ -109,6 +109,13 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/desk_toggled.xbm'"
   fi
+  if [ -e "$DEST_DIR/.themes/braph/openbox-3/desk.xbm" ]; then
+    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/desk.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk.xbm"; then
+      echo " ^--- .themes/braph/openbox-3/desk.xbm"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/desk.xbm'"
+  fi
   if [ -e "$DEST_DIR/.themes/braph/openbox-3/close.xbm" ]; then
     if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/close.xbm" "$DEST_DIR/.themes/braph/openbox-3/close.xbm"; then
       echo " ^--- .themes/braph/openbox-3/close.xbm"
@@ -116,12 +123,12 @@ cmd_diff() {
   else
     echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/close.xbm'"
   fi
-  if [ -e "$DEST_DIR/.themes/braph/openbox-3/max.xbm" ]; then
-    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/max.xbm" "$DEST_DIR/.themes/braph/openbox-3/max.xbm"; then
-      echo " ^--- .themes/braph/openbox-3/max.xbm"
+  if [ -e "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm" ]; then
+    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/bullet.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet.xbm"; then
+      echo " ^--- .themes/braph/openbox-3/bullet.xbm"
     fi
   else
-    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/max.xbm'"
+    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/bullet.xbm'"
   fi
   if [ -e "$DEST_DIR/.themes/braph/openbox-3/bullet-small.xbm" ]; then
     if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/bullet-small.xbm" "$DEST_DIR/.themes/braph/openbox-3/bullet-small.xbm"; then
@@ -129,13 +136,6 @@ cmd_diff() {
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/bullet-small.xbm'"
-  fi
-  if [ -e "$DEST_DIR/.themes/braph/openbox-3/desk.xbm" ]; then
-    if ! $DIFF "$BUILD_DIR/.themes/braph/openbox-3/desk.xbm" "$DEST_DIR/.themes/braph/openbox-3/desk.xbm"; then
-      echo " ^--- .themes/braph/openbox-3/desk.xbm"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.themes/braph/openbox-3/desk.xbm'"
   fi
 }
 
@@ -175,9 +175,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -223,7 +225,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -249,8 +251,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then

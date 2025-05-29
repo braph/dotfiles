@@ -29,8 +29,8 @@ cmd_build() {
   echo "Building \"$PACKAGE\" ..." >&2
   pre_build
   mkdir -p "$BUILD_DIR/.dillo"
-  "$FILEPP" -M.filepp_modules -m testfile.pm -kc '#>' -ec ENVIRONMENT. cookiesrc.pp -o "$BUILD_DIR/.dillo/cookiesrc"
   "$FILEPP" -M.filepp_modules -m testfile.pm -kc '#>' -ec ENVIRONMENT. dillorc.pp -o "$BUILD_DIR/.dillo/dillorc"
+  "$FILEPP" -M.filepp_modules -m testfile.pm -kc '#>' -ec ENVIRONMENT. cookiesrc.pp -o "$BUILD_DIR/.dillo/cookiesrc"
   cp -p "style.css" "$BUILD_DIR/.dillo/style.css"
   cp -p "keysrc" "$BUILD_DIR/.dillo/keysrc"
   post_build
@@ -47,8 +47,8 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/.dillo"
-  cp -p "$BUILD_DIR/.dillo/cookiesrc" "$DEST_DIR/.dillo/cookiesrc"
   cp -p "$BUILD_DIR/.dillo/dillorc" "$DEST_DIR/.dillo/dillorc"
+  cp -p "$BUILD_DIR/.dillo/cookiesrc" "$DEST_DIR/.dillo/cookiesrc"
   cp -p "$BUILD_DIR/.dillo/style.css" "$DEST_DIR/.dillo/style.css"
   cp -p "$BUILD_DIR/.dillo/keysrc" "$DEST_DIR/.dillo/keysrc"
   post_install
@@ -64,19 +64,19 @@ cmd_diff() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  if [ -e "$DEST_DIR/.dillo/cookiesrc" ]; then
-    if ! $DIFF "$BUILD_DIR/.dillo/cookiesrc" "$DEST_DIR/.dillo/cookiesrc"; then
-      echo " ^--- .dillo/cookiesrc"
-    fi
-  else
-    echo "No such file or directory: '$DEST_DIR/.dillo/cookiesrc'"
-  fi
   if [ -e "$DEST_DIR/.dillo/dillorc" ]; then
     if ! $DIFF "$BUILD_DIR/.dillo/dillorc" "$DEST_DIR/.dillo/dillorc"; then
       echo " ^--- .dillo/dillorc"
     fi
   else
     echo "No such file or directory: '$DEST_DIR/.dillo/dillorc'"
+  fi
+  if [ -e "$DEST_DIR/.dillo/cookiesrc" ]; then
+    if ! $DIFF "$BUILD_DIR/.dillo/cookiesrc" "$DEST_DIR/.dillo/cookiesrc"; then
+      echo " ^--- .dillo/cookiesrc"
+    fi
+  else
+    echo "No such file or directory: '$DEST_DIR/.dillo/cookiesrc'"
   fi
   if [ -e "$DEST_DIR/.dillo/style.css" ]; then
     if ! $DIFF "$BUILD_DIR/.dillo/style.css" "$DEST_DIR/.dillo/style.css"; then
@@ -130,9 +130,11 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
+  OLDPWD="$PWD"
+
   mkdir -p "$FILEPP_DIR"
 
-  pushd "$FILEPP_DIR" >/dev/null
+  cd "$FILEPP_DIR"
 
   FILEPP_VERSION="1.8.0"
   FILEPP_TAR_GZ="filepp-$FILEPP_VERSION.tar.gz"
@@ -178,7 +180,7 @@ get_filepp() {
     exit 1
   fi
 
-  pushd "$FILEPP_SOURCE_DIR" >/dev/null
+  cd "$FILEPP_SOURCE_DIR"
 
   echo "Calling ./configure ..." >&2
 
@@ -204,8 +206,7 @@ get_filepp() {
     exit 1
   fi
 
-  popd >/dev/null
-  popd >/dev/null
+  cd "$OLDPWD"
 } 
 
 if [ $# -eq 0 ]; then
