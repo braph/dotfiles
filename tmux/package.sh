@@ -18,11 +18,11 @@ THEME_COLOR_default=blue
 export THEME_COLOR="${THEME_COLOR:-$THEME_COLOR_default}"
 
 DEFAULT_SHELL_default=$(if type zsh >/dev/null 2>/dev/null; then
-    echo /bin/zsh
+    command -v zsh
   elif type bash >/dev/null 2>/dev/null; then
-    echo /bin/bash
+    command -v bash
   else
-    echo /bin/sh
+    command -v sh
   fi)
 export DEFAULT_SHELL="${DEFAULT_SHELL:-$DEFAULT_SHELL_default}"
 
