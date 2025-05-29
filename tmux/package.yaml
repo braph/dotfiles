@@ -3,9 +3,13 @@ defines:
 
   DEFAULT_SHELL: |
     SHELL:
-      type -p zsh  2>/dev/null || \
-      type -p bash 2>/dev/null || \
-      type -p sh   2>/dev/null
+      if type zsh >/dev/null 2>/dev/null; then
+        echo /bin/zsh
+      elif type bash >/dev/null 2>/dev/null; then
+        echo /bin/bash
+      else
+        echo /bin/sh
+      fi
 
   HAVE_DEV_SHM: |
     SHELL:

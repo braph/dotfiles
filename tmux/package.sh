@@ -17,9 +17,13 @@ DIFF="${DIFF:-diff}"
 THEME_COLOR_default=blue
 export THEME_COLOR="${THEME_COLOR:-$THEME_COLOR_default}"
 
-DEFAULT_SHELL_default=$(type -p zsh  2>/dev/null || \
-  type -p bash 2>/dev/null || \
-  type -p sh   2>/dev/null)
+DEFAULT_SHELL_default=$(if type zsh >/dev/null 2>/dev/null; then
+    echo /bin/zsh
+  elif type bash >/dev/null 2>/dev/null; then
+    echo /bin/bash
+  else
+    echo /bin/sh
+  fi)
 export DEFAULT_SHELL="${DEFAULT_SHELL:-$DEFAULT_SHELL_default}"
 
 HAVE_DEV_SHM_default=$(test -d /dev/shm && echo 1 || echo 0)
