@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-
-unset CDPATH
-set -u +o histexpand
+#!/bin/sh
 
 # Usage: $0 [infile] [outfile]
 INFILE=${1:-/dev/stdin}
