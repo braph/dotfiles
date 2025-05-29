@@ -55,7 +55,8 @@ cmd_install() {
 cmd_apply() {
   echo "Applying \"$PACKAGE\" ..." >&2
   killall imwheel || true
-  if type imwheel &>/dev/null; then
+
+  if type imwheel >/dev/null 2>/dev/null; then
     imwheel &
   fi
 
@@ -125,18 +126,18 @@ get_filepp() {
   FILEPP_SOURCE_DIR="filepp-$FILEPP_VERSION"
   FILEPP_URL="http://www-users.york.ac.uk/~dm26/filepp/$FILEPP_TAR_GZ"
 
-  if type wget &>/dev/null; then
+  if type wget >/dev/null 2>/dev/null; then
     echo "Downloading \"$FILEPP_URL\" ..." >&2
 
-    if ! wget "$FILEPP_URL" -O "$FILEPP_TAR_GZ" &>log; then
+    if ! wget "$FILEPP_URL" -O "$FILEPP_TAR_GZ" 2>log; then
       cat log >&2
       echo "Error: Command failed: wget \"$FILEPP_URL\" -O \"$FILEPP_TAR_GZ\"" >&2
       exit 1
     fi
-  elif type curl &>/dev/null; then
+  elif type curl >/dev/null 2>/dev/null; then
     echo "Downloading \"$FILEPP_URL\" ..." >&2
 
-    if ! curl -L --fail "$FILEPP_URL" -o "$FILEPP_TAR_GZ" &>log; then
+    if ! curl -L --fail "$FILEPP_URL" -o "$FILEPP_TAR_GZ" 2>log; then
       cat log >&2
       echo "Error: Command failed: curl -L --fail \"$FILEPP_URL\" -o \"$FILEPP_TAR_GZ\"" >&2
       exit 1
@@ -146,19 +147,19 @@ get_filepp() {
     exit 1
   fi
 
-  if ! type tar &>/dev/null; then
+  if ! type tar >/dev/null 2>/dev/null; then
     echo "Error: No tar program found" >&2
     exit 1
   fi
 
-  if ! type make &>/dev/null; then
+  if ! type make >/dev/null 2>/dev/null; then
     echo "Error: No make program found" >&2
     exit 1
   fi
 
   echo "Extracting archive ..." >&2
 
-  if ! tar xf "$FILEPP_TAR_GZ" &>log; then
+  if ! tar xf "$FILEPP_TAR_GZ" 2>log; then
     cat log >&2
     echo "Error: Command failed: tar xf \"$FILEPP_TAR_GZ\"" >&2
     exit 1
@@ -168,7 +169,7 @@ get_filepp() {
 
   echo "Calling ./configure ..." >&2
 
-  if ! ./configure --prefix="$FILEPP_DIR" &>log; then
+  if ! ./configure --prefix="$FILEPP_DIR" 2>log; then
     cat log >&2
     echo "Error: Command falied: ./configure --prefix=\"$FILEPP_DIR\"" >&2
     exit 1
@@ -176,7 +177,7 @@ get_filepp() {
 
   echo "Calling make ..." >&2
 
-  if ! make &>log; then
+  if ! make 2>log; then
     cat log >&2
     echo "Command failed: make" >&2
     exit 1
@@ -184,7 +185,7 @@ get_filepp() {
 
   echo "Calling make install ..." >&2
 
-  if ! make install &>log; then
+  if ! make install 2>log; then
     cat log >&2
     echo "Command failed: make install" >&2
     exit 1

@@ -4,6 +4,7 @@ defines:
 
 apply: |
   killall imwheel || true
-  if type imwheel &>/dev/null; then
+
+  if type imwheel >/dev/null 2>/dev/null; then
     imwheel &
   fi

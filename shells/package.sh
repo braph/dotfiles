@@ -38,14 +38,14 @@ export COLORIZE_CW="${COLORIZE_CW:-$COLORIZE_CW_default}"
 REMOVE_WHITESPACE_LINES_default=1
 export REMOVE_WHITESPACE_LINES="${REMOVE_WHITESPACE_LINES:-$REMOVE_WHITESPACE_LINES_default}"
 
-TMUX_VERSION_default=$(if type tmux &>/dev/null 2>/dev/null; then
+TMUX_VERSION_default=$(if type tmux >/dev/null 2>/dev/null; then
     tmux -V | sed 's/tmux //'
   else
     echo 0.0
   fi)
 export TMUX_VERSION="${TMUX_VERSION:-$TMUX_VERSION_default}"
 
-GEMPATH_default=$(if type gem &>/dev/null; then
+GEMPATH_default=$(if type gem >/dev/null 2>/dev/null; then
     gem env gempath
   fi)
 export GEMPATH="${GEMPATH:-$GEMPATH_default}"
@@ -67,7 +67,7 @@ LS_COLOR_default=$(if ls --help 2>&1 | grep -q -- --color; then
   fi)
 export LS_COLOR="${LS_COLOR:-$LS_COLOR_default}"
 
-HAVE_NVIM_default=$(type nvim &>/dev/null && echo 1 || echo 0)
+HAVE_NVIM_default=$(type nvim >/dev/null 2>/dev/null && echo 1 || echo 0)
 export HAVE_NVIM="${HAVE_NVIM:-$HAVE_NVIM_default}"
 
 HAVE_MAN_PROMPT_default=$(if man --help 2>&1 | grep -q -- --prompt; then
@@ -82,7 +82,7 @@ pre_build() {
   mkdir -p "$BUILD_DIR"
   # TODO use PACKAGE_TEMP_DIR
 
-  if type conpalette &>/dev/null; then
+  if type conpalette >/dev/null 2>/dev/null; then
     conpalette --shell --oneline blah-light > "$TEMP_DIR/vt_palette"
   else
     if ! [ -d "$TEMP_DIR/conpalette" ]; then
@@ -214,18 +214,18 @@ get_filepp() {
   FILEPP_SOURCE_DIR="filepp-$FILEPP_VERSION"
   FILEPP_URL="http://www-users.york.ac.uk/~dm26/filepp/$FILEPP_TAR_GZ"
 
-  if type wget &>/dev/null; then
+  if type wget >/dev/null 2>/dev/null; then
     echo "Downloading \"$FILEPP_URL\" ..." >&2
 
-    if ! wget "$FILEPP_URL" -O "$FILEPP_TAR_GZ" &>log; then
+    if ! wget "$FILEPP_URL" -O "$FILEPP_TAR_GZ" 2>log; then
       cat log >&2
       echo "Error: Command failed: wget \"$FILEPP_URL\" -O \"$FILEPP_TAR_GZ\"" >&2
       exit 1
     fi
-  elif type curl &>/dev/null; then
+  elif type curl >/dev/null 2>/dev/null; then
     echo "Downloading \"$FILEPP_URL\" ..." >&2
 
-    if ! curl -L --fail "$FILEPP_URL" -o "$FILEPP_TAR_GZ" &>log; then
+    if ! curl -L --fail "$FILEPP_URL" -o "$FILEPP_TAR_GZ" 2>log; then
       cat log >&2
       echo "Error: Command failed: curl -L --fail \"$FILEPP_URL\" -o \"$FILEPP_TAR_GZ\"" >&2
       exit 1
@@ -235,19 +235,19 @@ get_filepp() {
     exit 1
   fi
 
-  if ! type tar &>/dev/null; then
+  if ! type tar >/dev/null 2>/dev/null; then
     echo "Error: No tar program found" >&2
     exit 1
   fi
 
-  if ! type make &>/dev/null; then
+  if ! type make >/dev/null 2>/dev/null; then
     echo "Error: No make program found" >&2
     exit 1
   fi
 
   echo "Extracting archive ..." >&2
 
-  if ! tar xf "$FILEPP_TAR_GZ" &>log; then
+  if ! tar xf "$FILEPP_TAR_GZ" 2>log; then
     cat log >&2
     echo "Error: Command failed: tar xf \"$FILEPP_TAR_GZ\"" >&2
     exit 1
@@ -257,7 +257,7 @@ get_filepp() {
 
   echo "Calling ./configure ..." >&2
 
-  if ! ./configure --prefix="$FILEPP_DIR" &>log; then
+  if ! ./configure --prefix="$FILEPP_DIR" 2>log; then
     cat log >&2
     echo "Error: Command falied: ./configure --prefix=\"$FILEPP_DIR\"" >&2
     exit 1
@@ -265,7 +265,7 @@ get_filepp() {
 
   echo "Calling make ..." >&2
 
-  if ! make &>log; then
+  if ! make 2>log; then
     cat log >&2
     echo "Command failed: make" >&2
     exit 1
@@ -273,7 +273,7 @@ get_filepp() {
 
   echo "Calling make install ..." >&2
 
-  if ! make install &>log; then
+  if ! make install 2>log; then
     cat log >&2
     echo "Command failed: make install" >&2
     exit 1

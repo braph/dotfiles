@@ -3,7 +3,7 @@ defines:
   MUSIC_DIR:  "/media/main/music"
   NCMPCPP_VERSION: |
     SHELL:
-      if type ncmpcpp &>/dev/null; then
+      if type ncmpcpp >/dev/null 2>/dev/null; then
         ncmpcpp --version | sed -n 's/ncmpcpp //p;q';
       else
         echo 0.0

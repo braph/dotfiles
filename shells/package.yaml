@@ -13,7 +13,7 @@ defines:
 
   TMUX_VERSION: |
     SHELL:
-      if type tmux &>/dev/null 2>/dev/null; then
+      if type tmux >/dev/null 2>/dev/null; then
         tmux -V | sed 's/tmux //'
       else
         echo 0.0
@@ -21,7 +21,7 @@ defines:
 
   GEMPATH: |
     SHELL:
-      if type gem &>/dev/null; then
+      if type gem >/dev/null 2>/dev/null; then
         gem env gempath
       fi
 
@@ -47,7 +47,7 @@ defines:
 
   HAVE_NVIM: |
     SHELL:
-       type nvim &>/dev/null && echo 1 || echo 0
+       type nvim >/dev/null 2>/dev/null && echo 1 || echo 0
 
   HAVE_MAN_PROMPT: |
     SHELL:
@@ -60,7 +60,7 @@ defines:
 pre_build: |
   # TODO use PACKAGE_TEMP_DIR
 
-  if type conpalette &>/dev/null; then
+  if type conpalette >/dev/null 2>/dev/null; then
     conpalette --shell --oneline blah-light > "$TEMP_DIR/vt_palette"
   else
     if ! [ -d "$TEMP_DIR/conpalette" ]; then
