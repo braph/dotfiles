@@ -53,8 +53,8 @@ cmd_install() {
     echo "Error: $BUILD_DIR: No such directory: Did you run \"build\" yet?" >&2
     exit 1
   fi
-  mkdir -p "$DEST_DIR/.moc"
   mkdir -p "$DEST_DIR/.moc/themes"
+  mkdir -p "$DEST_DIR/.moc"
   cp -p "$BUILD_DIR/.moc/config" "$DEST_DIR/.moc/config"
   cp -p "$BUILD_DIR/.moc/themes/normal" "$DEST_DIR/.moc/themes/normal"
   cp -p "$BUILD_DIR/.moc/themes/full" "$DEST_DIR/.moc/themes/full"
@@ -156,7 +156,7 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
-  OLDPWD="$PWD"
+  LAST_PWD="$PWD"
 
   mkdir -p "$FILEPP_DIR"
 
@@ -232,7 +232,7 @@ get_filepp() {
     exit 1
   fi
 
-  cd "$OLDPWD"
+  cd "$LAST_PWD"
 } 
 
 if [ $# -eq 0 ]; then

@@ -57,7 +57,7 @@ cmd_build() {
 }
 
 post_install() {
-  OLDPWD="$PWD"
+  LAST_CWD="$PWD"
 
   # vim
   mkdir -p "$DEST_DIR/.vim/view"
@@ -65,7 +65,7 @@ post_install() {
 
   cd "$DEST_DIR/.vim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    cd "$OLDPWD"
+    cd "$LAST_CWD"
   } || true
 
   # nvim
@@ -74,7 +74,7 @@ post_install() {
 
   cd "$DEST_DIR/.config/nvim/bundle" && {
     git clone https://github.com/VundleVim/Vundle.vim || true
-    cd "$OLDPWD"
+    cd "$LAST_CWD"
   } || true
 
 }
@@ -86,10 +86,10 @@ cmd_install() {
     exit 1
   fi
   mkdir -p "$DEST_DIR/"
-  mkdir -p "$DEST_DIR/.config/nvim/skeltons"
-  mkdir -p "$DEST_DIR/.config/nvim/syntax"
   mkdir -p "$DEST_DIR/.config/nvim"
   mkdir -p "$DEST_DIR/.vim/syntax"
+  mkdir -p "$DEST_DIR/.config/nvim/syntax"
+  mkdir -p "$DEST_DIR/.config/nvim/skeltons"
   mkdir -p "$DEST_DIR/.vim/skeltons"
   cp -p "$BUILD_DIR/.vimrc" "$DEST_DIR/.vimrc"
   cp -p "$BUILD_DIR/.config/nvim/init.vim" "$DEST_DIR/.config/nvim/init.vim"
@@ -293,7 +293,7 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
-  OLDPWD="$PWD"
+  LAST_PWD="$PWD"
 
   mkdir -p "$FILEPP_DIR"
 
@@ -369,7 +369,7 @@ get_filepp() {
     exit 1
   fi
 
-  cd "$OLDPWD"
+  cd "$LAST_PWD"
 } 
 
 if [ $# -eq 0 ]; then

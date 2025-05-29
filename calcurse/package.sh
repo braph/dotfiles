@@ -112,7 +112,7 @@ EOF
 get_filepp() {
   [ -x "$FILEPP" ] && return
 
-  OLDPWD="$PWD"
+  LAST_PWD="$PWD"
 
   mkdir -p "$FILEPP_DIR"
 
@@ -188,7 +188,7 @@ get_filepp() {
     exit 1
   fi
 
-  cd "$OLDPWD"
+  cd "$LAST_PWD"
 } 
 
 if [ $# -eq 0 ]; then
