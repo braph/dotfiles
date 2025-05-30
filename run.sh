@@ -15,7 +15,7 @@ cmd_build() {
     if [ "$package" = "-e" ]; then
       WITH_EDIT=1
     else
-      PACKAGE_COUNT=`let PACKAGE_COUNT + 1`
+      PACKAGE_COUNT=$(( $PACKAGE_COUNT + 1 ))
     fi
   done
 
